@@ -1,0 +1,91 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.pbi.xcl
+*.pbi
+*.pbd
+*.pbd.tmp
+*.pbd.browse
+*.pbd.linf
+*.o
+*.xcl
+*.pbw
+*.ewt
+
+# Start up
+
+# Project
+
+#Eclipse
+.project
+
+*.txt
+
+# Compiled Static libraries
+
+# Executables
+*.hex
+*.out
+*.sim
+
+# List
+*.log
+*.map
+*.ninja_log
+*.ninja
+*.ninja_deps
+
+# Generated files
+settings/
+*.orig
+*.dbgdt
+*.wsdt
+*.dep
+
+VCAST/BLE_Master/build.vcw
+VCAST/BLE_Master/build/
+VCAST/BLE_Master/lock/
+VCAST/BLE_Master/logs/
+VCAST/BLE_Master/project.db
+VCAST/BLE_Master/python/
+VCAST/reg/
+Testing/OtherTests/RTP Tests Apps for Cywin/TargetCode/pktFile.bin
+Testing/OtherTests/RTP Tests Apps for Cywin/TargetCode/PseudoAlps.exe
+Testing/OtherTests/RTP Tests Apps for Cywin/TargetCode/PseudoEverest.exe
+*.exe
+*.a
+*.stackdump
+CodeBase.bin
+RadioConnectableLink.bin
+
+Obj/
+Debug/
+Release/
+Nucleo/
+NucleoH/
+NP/
+AP/
+*.tmp
+
+.suo
+/QA/OtherTests/Configurator/.vs/Configurator/v15/Server/sqlite3
+
+Middleware/Anjay/installed/lib/anjay/*.cmake
+Middleware/Anjay/installed/lib/avs_commons/*.cmake
+Middleware/Anjay/installed/lib/avs_commons/cmake/*.cmake
+Middleware/Anjay/installed/lib/avs_coap/*.cmake
+
+
+# Whitelist some files
+!BLE_APPS/components/nfc/t4t_lib/nfc_t4t_lib_iar.a
+!BLE_APPS/components/nfc/t4t_lib/nfc_t4t_lib_gcc.a
+!BLE_APPS/external/nrf_oberon/lib/cortex-m4/hard-float/liboberon_3.0.1.a
+!BLE_APPS/external/micro-ecc/nrf52hf_iar/armgcc/micro_ecc_lib_nrf52.a
+!BLE_APPS/external/nrf_oberon/lib/cortex-m4/hard-float/short-wchar/liboberon_3.0.1.a
+!PacketCraftCodebase/PacketCraftStack/thirdparty/nordic-bsp/external/nrf_cc310/lib/cortex-m4/soft-float\short-wchar/libnrf_cc310_0.9.12.a
+!PacketCraftCodebase/PacketCraftStack/thirdparty/nordic-bsp/external/nrf_cc310/lib/cortex-m4/soft-float/libnrf_cc310_0.9.12.a
+!QA/OtherTests/Configurator/InstallerSetup/Release/
+QA/OtherTests/Configurator/InstallerSetup/Release/*.exe
+!Middleware/Anjay/installed/lib/*.lib
+*.pyc
