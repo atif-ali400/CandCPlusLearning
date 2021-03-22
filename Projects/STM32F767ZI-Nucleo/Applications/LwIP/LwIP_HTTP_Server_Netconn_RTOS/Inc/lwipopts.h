@@ -204,6 +204,23 @@ The STM32F7xx allows computing and verifying the IP, UDP, TCP and ICMP checksums
  * LWIP_SOCKET==1: Enable Socket API (require to use sockets.c)
  */
 #define LWIP_SOCKET                     0
+/*
+   ------------------------------------
+   ---------- SSI and CGI options ----------
+   ------------------------------------
+*/
+/**
+ * LWIP_HTTPD_SSI == 1: Enable SSI ( Server Side Includes)
+ */
+//#define LWIP_HTTPD_SSI
+/**
+ * LWIP_HTTPD_CGI == 1: Enable CGI support (Command Gateway Interface)
+ */
+//#define LWIP_HTTPD_CGI
+/**
+ * LWIP_HTTPD_DYNAMIC_HEADERS == 1: Enable LWIP_HTTPD_DYNAMIC_HEADERS support (SSI)
+ */
+//#define LWIP_HTTPD_DYNAMIC_HEADERS
 
 /*
    ------------------------------------
