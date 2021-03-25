@@ -1206,6 +1206,9 @@
                 <name>$PROJ_DIR$\..\Src\httpserver-netconn.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\Src\json-maker.c</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\Src\main.c</name>
             </file>
             <file>

@@ -51,8 +51,11 @@
 #include "string.h"
 #include "httpserver-netconn.h"
 #include "cmsis_os.h"
-
+//#include "jsmn.h"
+//#include "ArduinoJson.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include "json-maker.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -165,6 +168,107 @@ static const unsigned char PAGE_START[] = {
   0x6e,0x61,0x3b,0x22,0x3e,0x4e,0x75,0x6d,0x62,0x65,0x72,0x20,0x6f,0x66,0x20,0x70,
   0x61,0x67,0x65,0x20,0x68,0x69,0x74,0x73,0x3a,0x0d,0x0a,0x00};
 
+//Server Test code start
+struct weather {
+    int temp;
+    int hum;
+};
+
+struct time {
+    int hour;
+    int minute;
+};
+
+struct measure {
+    struct weather weather;
+    struct time time;
+};
+
+struct data {
+    char const* city;
+    char const* street;
+    struct measure measure;
+    int samples[ 4 ];
+};
+
+/* Add a time object property in a JSON string.
+  "name":{"temp":-5,"hum":48}, */
+char* json_weather( char* dest, char const* name, struct weather const* weather ) {
+    dest = json_objOpen( dest, name );              // --> "name":{\0
+    dest = json_int( dest, "temp", weather->temp ); // --> "name":{"temp":22,\0
+    dest = json_int( dest, "hum", weather->hum );   // --> "name":{"temp":22,"hum":45,\0
+    dest = json_objClose( dest );                   // --> "name":{"temp":22,"hum":45},\0
+    return dest;
+}
+
+/* Add a time object property in a JSON string.
+  "name":{"hour":18,"minute":32}, */
+char* json_time( char* dest, char const* name, struct time const* time ) {
+    dest = json_objOpen( dest, name );
+    dest = json_int( dest, "hour",   time->hour   );
+    dest = json_int( dest, "minute", time->minute );
+    dest = json_objClose( dest );
+    return dest;
+}
+
+/* Add a measure object property in a JSON string.
+ "name":{"weather":{"temp":-5,"hum":48},"time":{"hour":18,"minute":32}}, */
+char* json_measure( char* dest, char const* name, struct measure const* measure ) {
+    dest = json_objOpen( dest, name );
+    dest = json_weather( dest, "weather", &measure->weather );
+    dest = json_time( dest, "time", &measure->time );
+    dest = json_objClose( dest );
+    return dest;
+}
+
+/* Add a data object property in a JSON string. */
+char* json_data( char* dest, char const* name, struct data const* data ) {
+    dest = json_objOpen( dest, NULL );
+    dest = json_str( dest, "city",   data->city );
+    dest = json_str( dest, "street", data->street );
+    dest = json_measure( dest, "measure", &data->measure );
+    dest = json_arrOpen( dest, "samples" );
+    for( int i = 0; i < 4; ++i )
+        dest = json_int( dest, NULL, data->samples[i] );
+    dest = json_arrClose( dest );
+    dest = json_objClose( dest );
+    return dest;
+}
+
+/** Convert a data structure to a root JSON object.
+  * @param dest Destination memory block.
+  * @param data Source data structure.
+  * @return  The JSON string length. */
+int data_to_json( char* dest, struct data const* data ) {
+    char* p = json_data( dest, NULL, data );
+    p = json_end( p );
+    return p - dest;
+}
+
+/*
+ * {
+ *     "city": "liverpool",
+ *     "street": "mathew",
+ *     "measure": {
+ *         "weather": {
+ *             "temp": 25,
+ *             "hum": 65
+ *         },
+ *         "time": {
+ *             "hour": 14,
+ *             "minute": 31
+ *         }
+ *     },
+ *     "samples": [
+ *         25,
+ *         65,
+ *         -37,
+ *         512
+ *     ]
+ * }
+ *
+ */
+//Server test code end
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -265,7 +369,7 @@ static void http_server_serve(struct netconn *conn)
           fs_close(&file);
         }
         
-       
+        
         else 
         {
           /* Load Error page */
@@ -280,27 +384,70 @@ static void http_server_serve(struct netconn *conn)
       else if ((buflen >=6) && (strncmp(buf, "POST /", 6) == 0))
       {
         /* Check if request to POST  */ 
-         if((strncmp(buf, "POST /STM32F7xx.html", 20) == 0)||(strncmp(buf, "POST / ", 7) == 0))
+        if((strncmp(buf, "POST /STM32F7xx.html", 20) == 0)||(strncmp(buf, "POST / ", 7) == 0))
         {
-          //fs_open(&file, "/STM32F7xx_files/ST.gif"); 
-          const char *SuccessfulPOSTResponse = "{ 'StatusCode': 200, 'Message': 'Success'}";
-          netconn_write(conn, (const unsigned char*)SuccessfulPOSTResponse, (size_t)strlen(SuccessfulPOSTResponse), NETCONN_NOCOPY);
-         // fs_close(&file);
-        }   
-//         if((strncmp(buf, "POST /STM32F7xx.html", 20) == 0)||(strncmp(buf, "POST / ", 7) == 0)) 
-//        {
-//          /* Load STM32F7xx page */ 
-//          fs_open(&file, "/jQuery/jquery.js"); 
-//          netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
-//          fs_close(&file);
-//        }
+//          char *data = "{ 'StatusCode': 200, 'Message': 'Success'}";
+//          int resultCode;
+//          jsmn_parser parser;
+//          jsmntok_t token[128]; /* We expect no more than 128 JSON tokens */
+//          
+//          jsmn_init(&parser);
+//          resultCode = jsmn_parse(&parser, data, strlen(data), token, 128);
+          
+          //char *buffer;
+          //Json maker test code starts
+          static struct data const data = {
+        .city    = "liverpool",
+        .street  = "mathew",
+        .measure = {
+            .weather = {
+                .hum  = 65,
+                .temp = 25
+            },
+            .time = {
+                .hour   = 14,
+                .minute = 31
+            }
+        },
+        .samples = {
+             25,
+             65,
+            -37,
+            512
+        }
+    };
+    char buff[512];
+    int len = data_to_json( buff, &data );
+  //  if( len >= sizeof buff ) {
+  //      fprintf( stderr, "%s%d%s%d\n", "Error. Len: ", len, " Max: ", (int)sizeof buff - 1 );
+      //  return EXIT_FAILURE;
+  //  }
+   // puts( buff );
+          
+          //Json maker test code ends
+          
+         // char *SuccessfulPOSTResponse = "{'StatusCode': 200, 'Message': 'Success'}";
+         // sprintf(buffer,"\{\StatusCode\:\%d\,\Message\:%s}",200,'Suc');
+         // sprintf(buffer,"{\'StatusCode\'\)";
+         // netconn_write(conn, (const unsigned char*)SuccessfulPOSTResponse, (size_t)strlen(SuccessfulPOSTResponse), NETCONN_NOCOPY);
+         // netconn_write(conn, (const unsigned char*)buffer, (size_t)strlen(buffer), NETCONN_NOCOPY);
+          netconn_write(conn, (const unsigned char*)buff, (size_t)strlen(buff), NETCONN_NOCOPY);
+         
+}   
+        //         if((strncmp(buf, "POST /STM32F7xx.html", 20) == 0)||(strncmp(buf, "POST / ", 7) == 0)) 
+        //        {
+        //          /* Load STM32F7xx page */ 
+        //          fs_open(&file, "/jQuery/jquery.js"); 
+        //          netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+        //          fs_close(&file);
+        //        }
         
       }
       else
       {
         //To do
       }
-       //End of the test string for embedded webserver
+      //End of the test string for embedded webserver
     }
   }
   /* Close the connection (server closes in HTTP) */

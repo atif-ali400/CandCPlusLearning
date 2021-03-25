@@ -1019,7 +1019,7 @@
                 </option>
                 <option>
                     <name>IlinkTrustzoneImportLibraryOut</name>
-                    <state>###Unitialized###</state>
+                    <state>Project_import_lib.o</state>
                 </option>
                 <option>
                     <name>OILinkExtraOption</name>
@@ -1088,6 +1088,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Src\httpserver-netconn.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\Src\json-maker.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Src\main.c</name>
