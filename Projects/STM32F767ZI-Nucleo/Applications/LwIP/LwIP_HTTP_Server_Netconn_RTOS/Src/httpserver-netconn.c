@@ -282,17 +282,18 @@ static void http_server_serve(struct netconn *conn)
   struct netbuf *inbuf;
   err_t recv_err;
   char* buf;
-  u16_t buflen;
+  static u16_t buflen;
   struct fs_file file;
   
   /* Read the data from the port, blocking if nothing yet there. 
   We assume the request (the part we care about) is in one netbuf */
   recv_err = netconn_recv(conn, &inbuf);
-  
+  //char* payload = inbuf->p->payload;
   if (recv_err == ERR_OK)
   {
     if (netconn_err(conn) == ERR_OK) 
     {
+      //buf is the payload
       netbuf_data(inbuf, (void**)&buf, &buflen);
       
       /* Is this an HTTP GET command? (only check the first 5 chars, since
@@ -383,9 +384,22 @@ static void http_server_serve(struct netconn *conn)
       there are other formats for POST, and we're keeping it very simple )*/
       else if ((buflen >=6) && (strncmp(buf, "POST /", 6) == 0))
       {
+        char *SuccessfulPOSTResponse = "Nothing";
+        
         /* Check if request to POST  */ 
         if((strncmp(buf, "POST /STM32F7xx.html", 20) == 0)||(strncmp(buf, "POST / ", 7) == 0))
         {
+          
+          if((strncmp(buf, "POST /STM32F7xx.html/ledOn=true", 31) == 0))
+        {
+           SuccessfulPOSTResponse = "LEDOn";
+           netconn_write(conn, (const unsigned char*)SuccessfulPOSTResponse, (size_t)strlen(SuccessfulPOSTResponse), NETCONN_NOCOPY);
+          
+        }else
+        {
+          SuccessfulPOSTResponse = "LEDNotfound";
+          netconn_write(conn, (const unsigned char*)SuccessfulPOSTResponse, (size_t)strlen(SuccessfulPOSTResponse), NETCONN_NOCOPY);
+        }
 //          char *data = "{ 'StatusCode': 200, 'Message': 'Success'}";
 //          int resultCode;
 //          jsmn_parser parser;
@@ -396,6 +410,7 @@ static void http_server_serve(struct netconn *conn)
           
           //char *buffer;
           //Json maker test code starts
+        /*
           static struct data const data = {
         .city    = "liverpool",
         .street  = "mathew",
@@ -418,11 +433,6 @@ static void http_server_serve(struct netconn *conn)
     };
     char buff[512];
     int len = data_to_json( buff, &data );
-  //  if( len >= sizeof buff ) {
-  //      fprintf( stderr, "%s%d%s%d\n", "Error. Len: ", len, " Max: ", (int)sizeof buff - 1 );
-      //  return EXIT_FAILURE;
-  //  }
-   // puts( buff );
           
           //Json maker test code ends
           
@@ -431,7 +441,7 @@ static void http_server_serve(struct netconn *conn)
          // sprintf(buffer,"{\'StatusCode\'\)";
          // netconn_write(conn, (const unsigned char*)SuccessfulPOSTResponse, (size_t)strlen(SuccessfulPOSTResponse), NETCONN_NOCOPY);
          // netconn_write(conn, (const unsigned char*)buffer, (size_t)strlen(buffer), NETCONN_NOCOPY);
-          netconn_write(conn, (const unsigned char*)buff, (size_t)strlen(buff), NETCONN_NOCOPY);
+          netconn_write(conn, (const unsigned char*)buff, (size_t)strlen(buff), NETCONN_NOCOPY);*/
          
 }   
         //         if((strncmp(buf, "POST /STM32F7xx.html", 20) == 0)||(strncmp(buf, "POST / ", 7) == 0)) 
