@@ -56,6 +56,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "json-maker.h"
+#include "stm32f7xx_nucleo_144.h"
+
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -389,17 +391,37 @@ static void http_server_serve(struct netconn *conn)
         /* Check if request to POST  */ 
         if((strncmp(buf, "POST /STM32F7xx.html", 20) == 0)||(strncmp(buf, "POST / ", 7) == 0))
         {
-          
-          if((strncmp(buf, "POST /STM32F7xx.html/ledOn=true", 31) == 0))
+         // char* payload = strchr(( char*)buf,'{');
+          char* payload = strstr((const char*)buf,"ledOn");
+                    //if((strncmp(payload, "ledOn\":true", 11) == 0))
+          if((strstr(payload, "true"))!=NULL)
         {
+          /* Turn On LED 2 on client request*/
+           BSP_LED_On(LED2);
            SuccessfulPOSTResponse = "LEDOn";
            netconn_write(conn, (const unsigned char*)SuccessfulPOSTResponse, (size_t)strlen(SuccessfulPOSTResponse), NETCONN_NOCOPY);
           
         }else
         {
+          BSP_LED_Off(LED2);
           SuccessfulPOSTResponse = "LEDNotfound";
           netconn_write(conn, (const unsigned char*)SuccessfulPOSTResponse, (size_t)strlen(SuccessfulPOSTResponse), NETCONN_NOCOPY);
         }
+          
+        //  netconn_write(conn, (const unsigned char*)payload, (size_t)strlen(payload), NETCONN_NOCOPY);
+//          if((strncmp(buf, "POST /STM32F7xx.html", 31) == 0))
+//        {
+//          /* Turn On LED 2 on client request*/
+//           BSP_LED_On(LED2);
+//           SuccessfulPOSTResponse = "LEDOn";
+//           netconn_write(conn, (const unsigned char*)SuccessfulPOSTResponse, (size_t)strlen(SuccessfulPOSTResponse), NETCONN_NOCOPY);
+//          
+//        }else
+//        {
+//          BSP_LED_Off(LED2);
+//          SuccessfulPOSTResponse = "LEDNotfound";
+//          netconn_write(conn, (const unsigned char*)SuccessfulPOSTResponse, (size_t)strlen(SuccessfulPOSTResponse), NETCONN_NOCOPY);
+//        }
 //          char *data = "{ 'StatusCode': 200, 'Message': 'Success'}";
 //          int resultCode;
 //          jsmn_parser parser;

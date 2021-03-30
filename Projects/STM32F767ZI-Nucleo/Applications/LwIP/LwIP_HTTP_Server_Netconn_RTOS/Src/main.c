@@ -97,9 +97,9 @@ int main(void)
   SystemClock_Config(); 
   
   /*configure LED1 and LED3 */
-  BSP_LED_Init(LED1);
+  BSP_LED_Init(LED1); //LED1: ethernet cable is connected.
   BSP_LED_Init(LED2);
-  BSP_LED_Init(LED3);
+  BSP_LED_Init(LED3); //LED3: ethernet cable is not connected.
   
   /* Init thread */
 #if defined(__GNUC__)
