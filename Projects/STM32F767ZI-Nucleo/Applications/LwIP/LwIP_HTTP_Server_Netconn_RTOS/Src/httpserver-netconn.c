@@ -53,6 +53,7 @@
 #include "cmsis_os.h"
 //#include "jsmn.h"
 //#include "ArduinoJson.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "json-maker.h"
@@ -171,6 +172,11 @@ static const unsigned char PAGE_START[] = {
   0x61,0x67,0x65,0x20,0x68,0x69,0x74,0x73,0x3a,0x0d,0x0a,0x00};
 
 //Server Test code start
+struct led_status {
+  bool led1;
+  bool led2;
+  bool led3;
+};
 struct weather {
     int temp;
     int hum;
@@ -192,7 +198,16 @@ struct data {
     struct measure measure;
     int samples[ 4 ];
 };
-
+/* Add a led_status object property in a JSON string.
+  "name":{"led1":true,"led2":true,"led3":true}, */
+char* json_led_status( char* dest, char const* name, struct led_status const* led_status ) {
+    dest = json_objOpen( dest, name );              // --> "name":{\0
+    dest = json_bool( dest, "led1", led_status->led1 ); // --> "name":{"led1":true,\0
+    dest = json_bool( dest, "led2", led_status->led2 ); // --> "name":{"led1":true,"led2":true,\0   // --> "name":{"temp":22,"hum":45,\0
+    dest = json_bool( dest, "led3", led_status->led3 ); // --> "name":{"led1":true,"led2":true,"led3":true,\0
+    dest = json_objClose( dest );                   // --> "name":{"led1":true,"led2":true,"led3":true},\0
+    return dest;
+}
 /* Add a time object property in a JSON string.
   "name":{"temp":-5,"hum":48}, */
 char* json_weather( char* dest, char const* name, struct weather const* weather ) {
@@ -286,6 +301,7 @@ static void http_server_serve(struct netconn *conn)
   char* buf;
   static u16_t buflen;
   struct fs_file file;
+  struct led_status ledStatus_s;
   
   /* Read the data from the port, blocking if nothing yet there. 
   We assume the request (the part we care about) is in one netbuf */
@@ -387,28 +403,58 @@ static void http_server_serve(struct netconn *conn)
       else if ((buflen >=6) && (strncmp(buf, "POST /", 6) == 0))
       {
         char *SuccessfulPOSTResponse = "Nothing";
-        
+        //netconn_write(conn, (const unsigned char*)buf, (size_t)strlen(buf), NETCONN_NOCOPY);
+        char* payload = strstr((const char*)buf,"led1On");
         /* Check if request to POST  */ 
+        
         if((strncmp(buf, "POST /STM32F7xx.html", 20) == 0)||(strncmp(buf, "POST / ", 7) == 0))
         {
          // char* payload = strchr(( char*)buf,'{');
-          char* payload = strstr((const char*)buf,"ledOn");
+          
                     //if((strncmp(payload, "ledOn\":true", 11) == 0))
-          if((strstr(payload, "true"))!=NULL)
+          if((strstr(payload, "led1On=true"))!=NULL)
+        {
+          /* Turn On LED 1 on client request*/
+           BSP_LED_On(LED1);
+         //  ledStatus_s->
+           SuccessfulPOSTResponse = "Led1On";
+           netconn_write(conn, (const unsigned char*)SuccessfulPOSTResponse, (size_t)strlen(SuccessfulPOSTResponse), NETCONN_NOCOPY);
+          
+        }else
+        
+          BSP_LED_Off(LED1);
+          SuccessfulPOSTResponse = "Led1Off";
+          netconn_write(conn, (const unsigned char*)SuccessfulPOSTResponse, (size_t)strlen(SuccessfulPOSTResponse), NETCONN_NOCOPY);
+        }
+        if((strstr(payload, "led2On=true"))!=NULL)
         {
           /* Turn On LED 2 on client request*/
            BSP_LED_On(LED2);
-           SuccessfulPOSTResponse = "LEDOn";
+           SuccessfulPOSTResponse = "Led2On";
            netconn_write(conn, (const unsigned char*)SuccessfulPOSTResponse, (size_t)strlen(SuccessfulPOSTResponse), NETCONN_NOCOPY);
           
         }else
         {
           BSP_LED_Off(LED2);
-          SuccessfulPOSTResponse = "LEDNotfound";
+          SuccessfulPOSTResponse = "Led2Off";
           netconn_write(conn, (const unsigned char*)SuccessfulPOSTResponse, (size_t)strlen(SuccessfulPOSTResponse), NETCONN_NOCOPY);
         }
+        if((strstr(payload, "led3On=true"))!=NULL)
+        {
+          /* Turn On LED 2 on client request*/
+           BSP_LED_On(LED3);
+           SuccessfulPOSTResponse = "Led3On";
+           netconn_write(conn, (const unsigned char*)SuccessfulPOSTResponse, (size_t)strlen(SuccessfulPOSTResponse), NETCONN_NOCOPY);
           
-        //  netconn_write(conn, (const unsigned char*)payload, (size_t)strlen(payload), NETCONN_NOCOPY);
+        }else
+        {
+          BSP_LED_Off(LED3);
+          SuccessfulPOSTResponse = "Led3Off";
+          netconn_write(conn, (const unsigned char*)SuccessfulPOSTResponse, (size_t)strlen(SuccessfulPOSTResponse), NETCONN_NOCOPY);
+        }
+      }
+          
+//          netconn_write(conn, (const unsigned char*)payload, (size_t)strlen(payload), NETCONN_NOCOPY);
 //          if((strncmp(buf, "POST /STM32F7xx.html", 31) == 0))
 //        {
 //          /* Turn On LED 2 on client request*/
@@ -480,8 +526,6 @@ static void http_server_serve(struct netconn *conn)
         //To do
       }
       //End of the test string for embedded webserver
-    }
-  }
   /* Close the connection (server closes in HTTP) */
   netconn_close(conn);
   
