@@ -53,7 +53,7 @@
 #include "cmsis_os.h"
 //#include "jsmn.h"
 //#include "ArduinoJson.h"
-//#include <stdbool.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "json-maker.h"
@@ -173,11 +173,11 @@ static const unsigned char PAGE_START[] = {0
 };
 
 //Server Test code start
-//struct led_status {
-//  bool led1;
-//  bool led2;
-//  bool led3;
-//};
+struct led_status {
+  bool led1;
+  bool led2;
+  bool led3;
+};
 struct weather {
     int temp;
     int hum;
@@ -204,16 +204,16 @@ struct data {
   * @param src Source structure.
   * @return The length of the null-terminated string in dest. */
  /* "name":{"led1":true,"led2":true,"led3":true}, */
-//int led_status_to_json( char* dest, struct led_status const* data_src ) {
-//    char* temp_p = dest;  // temp_p always points to the null character
-//    temp_p = json_objOpen( temp_p, NULL );              // --> {\0
-//    temp_p = json_bool( temp_p, "led1", data_src->led1 ); // --> {"led1":true,\0
-//    temp_p = json_bool( temp_p, "led2", data_src->led2 ); // --> {"led1":true,"led2":true,\0   // --> "name":{"temp":22,"hum":45,\0
-//    temp_p = json_bool( temp_p, "led3", data_src->led3 ); // --> {"led1":true,"led2":true,"led3":true,\0
-//    temp_p = json_objClose( temp_p );                   // --> {"led1":true,"led2":true,"led3":true},\0
-//    temp_p = json_end( temp_p ); // --> "name":{"led1":true,"led2":true,"led3":true}\0
-//    return (temp_p - dest);
-//}
+int led_status_to_json( char* dest, struct led_status const* data_src ) {
+    char* temp_p = dest;  // temp_p always points to the null character
+    temp_p = json_objOpen( temp_p, NULL );              // --> {\0
+    temp_p = json_bool( temp_p, "led1", data_src->led1 ); // --> {"led1":true,\0
+    temp_p = json_bool( temp_p, "led2", data_src->led2 ); // --> {"led1":true,"led2":true,\0   // --> "name":{"temp":22,"hum":45,\0
+    temp_p = json_bool( temp_p, "led3", data_src->led3 ); // --> {"led1":true,"led2":true,"led3":true,\0
+    temp_p = json_objClose( temp_p );                   // --> {"led1":true,"led2":true,"led3":true},\0
+    temp_p = json_end( temp_p ); // --> "name":{"led1":true,"led2":true,"led3":true}\0
+    return (temp_p - dest);
+}
 /* Add a time object property in a JSON string.
   "name":{"temp":-5,"hum":48}, */
 char* json_weather( char* dest, char const* name, struct weather const* weather ) {
@@ -284,12 +284,12 @@ static void http_server_serve(struct netconn *conn)
   char* buf;
   static u16_t buflen;
   struct fs_file file;
-//  struct led_status ledStatus_s;
+  struct led_status ledStatus_s;
   char json_output[512];
   /* Read the data from the port, blocking if nothing yet there. 
   We assume the request (the part we care about) is in one netbuf */
   recv_err = netconn_recv(conn, &inbuf);
-  //char* payload = inbuf->p->payload;
+  
   if (recv_err == ERR_OK)
   {
     if (netconn_err(conn) == ERR_OK) 
@@ -399,41 +399,43 @@ static void http_server_serve(struct netconn *conn)
         {
           /* Turn On LED 1 on client request*/
            BSP_LED_On(LED1);
-    //       ledStatus_s.led1 = true;
+           ledStatus_s.led1 = true;
           
-        }else
+        }else{
         
           BSP_LED_Off(LED1);
-  //        ledStatus_s.led1 = false;
+          ledStatus_s.led1 = false;
         }
         if((strstr(payload, "led2On=true"))!=NULL)
         {
           /* Turn On LED 2 on client request*/
            BSP_LED_On(LED2);
-   //        ledStatus_s.led2 = true;
+           ledStatus_s.led2 = true;
           
         }else
         {
           BSP_LED_Off(LED2);
-    //      ledStatus_s.led1 = false;
+          ledStatus_s.led2 = false;
         }
         if((strstr(payload, "led3On=true"))!=NULL)
         {
           /* Turn On LED 2 on client request*/
            BSP_LED_On(LED3);
-     //      ledStatus_s.led3 = true;
-           netconn_write(conn, (const unsigned char*)payload, (size_t)strlen(payload), NETCONN_NOCOPY);
+           ledStatus_s.led3 = true;
+          
           
         }else
         {
           BSP_LED_Off(LED3);
-     //     ledStatus_s.led3 = false;
+          ledStatus_s.led3 = false;
         }
+        // netconn_write(conn, (const unsigned char*)payload, (size_t)strlen(payload), NETCONN_NOCOPY);
+           int json_data_length = led_status_to_json(json_output, &ledStatus_s);
+    //  if(json_data_length<= buflen)
+           netconn_write(conn, (const unsigned char*)json_output, (size_t)strlen(json_output), NETCONN_NOCOPY);
       }
       
-   //   int json_data_length = led_status_to_json(json_output, &ledStatus_s);
-    //  if(json_data_length<= buflen)
-     // netconn_write(conn, (const unsigned char*)json_output, (size_t)strlen(json_output), NETCONN_NOCOPY);
+      
           
         //  netconn_write(conn, (const unsigned char*), (size_t)strlen(payload), NETCONN_NOCOPY);
 //          if((strncmp(buf, "POST /STM32F7xx.html", 31) == 0))
@@ -492,7 +494,7 @@ static void http_server_serve(struct netconn *conn)
          // netconn_write(conn, (const unsigned char*)buffer, (size_t)strlen(buffer), NETCONN_NOCOPY);
           netconn_write(conn, (const unsigned char*)buff, (size_t)strlen(buff), NETCONN_NOCOPY);*/
          
-}   
+      } 
         //         if((strncmp(buf, "POST /STM32F7xx.html", 20) == 0)||(strncmp(buf, "POST / ", 7) == 0)) 
         //        {
         //          /* Load STM32F7xx page */ 
@@ -506,6 +508,7 @@ static void http_server_serve(struct netconn *conn)
       {
         //To do
       }
+  }
       //End of the test string for embedded webserver
   /* Close the connection (server closes in HTTP) */
   netconn_close(conn);
