@@ -1101,6 +1101,9 @@
             <file>
                 <name>$PROJ_DIR$\..\Src\stm32f7xx_it.c</name>
             </file>
+            <file>
+                <name>$PROJ_DIR$\..\Src\tiny-json.c</name>
+            </file>
         </group>
     </group>
     <group>

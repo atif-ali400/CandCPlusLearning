@@ -57,6 +57,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "json-maker.h"
+#include "tiny-json.h"
 #include "stm32f7xx_nucleo_144.h"
 
 
@@ -178,6 +179,7 @@ struct led_status {
   bool led2;
   bool led3;
 };
+
 struct weather {
     int temp;
     int hum;
@@ -286,6 +288,7 @@ static void http_server_serve(struct netconn *conn)
   struct fs_file file;
   struct led_status ledStatus_s;
   char json_output[512];
+  json_t tokens[30];
   /* Read the data from the port, blocking if nothing yet there. 
   We assume the request (the part we care about) is in one netbuf */
   recv_err = netconn_recv(conn, &inbuf);
@@ -387,7 +390,20 @@ static void http_server_serve(struct netconn *conn)
       {
        // char *SuccessfulPOSTResponse = "Nothing";
         //netconn_write(conn, (const unsigned char*)buf, (size_t)strlen(buf), NETCONN_NOCOPY);
-        char* payload = strstr((const char*)buf,"led1On");
+        char* payload = strchr((const char*)buf,'{');
+        json_t const* json = json_create(payload,tokens,(sizeof(tokens)/sizeof (*tokens)));
+      //  netconn_write(conn, (const unsigned char*)payload, (size_t)strlen(payload), NETCONN_NOCOPY);
+        if(json)
+        {
+          volatile int test = 2;
+        }
+       // json_t const* led1On= json_getProperty(json,"led1On");
+        //json_t const* led2On= json_getProperty(json,"led2On");
+       // json_t const* led3On= json_getProperty(json,"led3On");
+        
+        char const* led1Value = json_getPropertyValue(json,"led1On");
+        char const* led2Value = json_getPropertyValue(json,"led2On");
+        char const* led3Value = json_getPropertyValue(json,"led3On");
         /* Check if request to POST  */ 
         
         if((strncmp(buf, "POST /STM32F7xx.html", 20) == 0)||(strncmp(buf, "POST / ", 7) == 0))
@@ -395,7 +411,8 @@ static void http_server_serve(struct netconn *conn)
          // char* payload = strchr(( char*)buf,'{');
           
                     //if((strncmp(payload, "ledOn\":true", 11) == 0))
-          if((strstr(payload, "led1On=true"))!=NULL)
+         // if((strstr(payload, "led1On=true"))!=NULL)
+          if(strncmp(led1Value, "true", 4) == 0)
         {
           /* Turn On LED 1 on client request*/
            BSP_LED_On(LED1);
@@ -406,7 +423,8 @@ static void http_server_serve(struct netconn *conn)
           BSP_LED_Off(LED1);
           ledStatus_s.led1 = false;
         }
-        if((strstr(payload, "led2On=true"))!=NULL)
+       // if((strstr(payload, "led2On=true"))!=NULL)
+        if(strncmp(led2Value, "true", 4) == 0)
         {
           /* Turn On LED 2 on client request*/
            BSP_LED_On(LED2);
@@ -417,7 +435,8 @@ static void http_server_serve(struct netconn *conn)
           BSP_LED_Off(LED2);
           ledStatus_s.led2 = false;
         }
-        if((strstr(payload, "led3On=true"))!=NULL)
+        //if((strstr(payload, "led3On=true"))!=NULL)
+        if(strncmp(led3Value, "true", 4) == 0)
         {
           /* Turn On LED 2 on client request*/
            BSP_LED_On(LED3);
