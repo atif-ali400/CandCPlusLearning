@@ -412,7 +412,7 @@ static void http_server_serve(struct netconn *conn)
           
                     //if((strncmp(payload, "ledOn\":true", 11) == 0))
          // if((strstr(payload, "led1On=true"))!=NULL)
-          if(strncmp(led1Value, "true", 4) == 0)
+          if(strcmp(led1Value, "true") == 0)
         {
           /* Turn On LED 1 on client request*/
            BSP_LED_On(LED1);
@@ -424,7 +424,7 @@ static void http_server_serve(struct netconn *conn)
           ledStatus_s.led1 = false;
         }
        // if((strstr(payload, "led2On=true"))!=NULL)
-        if(strncmp(led2Value, "true", 4) == 0)
+        if(strcmp(led2Value, "true") == 0)
         {
           /* Turn On LED 2 on client request*/
            BSP_LED_On(LED2);
@@ -436,7 +436,7 @@ static void http_server_serve(struct netconn *conn)
           ledStatus_s.led2 = false;
         }
         //if((strstr(payload, "led3On=true"))!=NULL)
-        if(strncmp(led3Value, "true", 4) == 0)
+        if(strcmp(led3Value, "true") == 0)
         {
           /* Turn On LED 2 on client request*/
            BSP_LED_On(LED3);
