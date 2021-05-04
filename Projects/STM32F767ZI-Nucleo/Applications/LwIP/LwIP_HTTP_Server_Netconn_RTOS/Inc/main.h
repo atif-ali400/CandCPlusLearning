@@ -47,6 +47,13 @@
 #ifndef __MAIN_H
 #define __MAIN_H
 
+#define SERVER_PORT "4433"
+
+#define HTTP_RESPONSE \
+    "HTTP/1.0 200 OK\r\nContent-Type: text/html\r\n\r\n" \
+    "<h2>mbed TLS Test Server</h2>\r\n" \
+    "<p>Successful connection using: %s</p>\r\n"
+      
 #ifdef __cplusplus
  extern "C" {
 #endif
@@ -76,10 +83,14 @@
 #define GW_ADDR1   168
 #define GW_ADDR2   0
 #define GW_ADDR3   1 
+   
+#ifdef MBEDTLS_MEMORY_BUFFER_ALLOC_C
+#define MAX_MEM_SIZE 80 * 1024
+#endif
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */  
-
+void Error_Handler(void);
 
 #ifdef __cplusplus
 }

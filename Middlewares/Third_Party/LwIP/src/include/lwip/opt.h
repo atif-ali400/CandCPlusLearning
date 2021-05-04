@@ -1008,7 +1008,7 @@
  * transport.
  */
 #if !defined LWIP_DNS || defined __DOXYGEN__
-#define LWIP_DNS                        0
+#define LWIP_DNS                        1  //Updated to 1 from 0 to enable TLS support
 #endif
 
 /** DNS maximum number of entries to maintain locally. */

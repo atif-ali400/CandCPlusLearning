@@ -1212,6 +1212,9 @@
                 <name>$PROJ_DIR$\..\Src\main.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\Src\net_sockets.c</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\Src\stm32f7xx_hal_timebase_tim.c</name>
             </file>
             <file>
@@ -1481,6 +1484,9 @@
                     <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LwIP\system\OS\sys_arch.c</name>
                 </file>
             </group>
+        </group>
+        <group>
+            <name>mbedTLS</name>
         </group>
     </group>
 </project>

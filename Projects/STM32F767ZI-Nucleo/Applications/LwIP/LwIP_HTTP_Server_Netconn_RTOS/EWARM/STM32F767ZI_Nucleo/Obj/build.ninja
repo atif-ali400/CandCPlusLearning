@@ -25,6 +25,7 @@ build ethernetif.pbi : index ethernetif.xcl
 build httpserver-netconn.pbi : index httpserver-netconn.xcl
 build json-maker.pbi : index json-maker.xcl
 build main.pbi : index main.xcl
+build net_sockets.pbi : index net_sockets.xcl
 build stm32f7xx_hal_timebase_tim.pbi : index stm32f7xx_hal_timebase_tim.xcl
 build stm32f7xx_it.pbi : index stm32f7xx_it.xcl
 build tiny-json.pbi : index tiny-json.xcl
@@ -97,15 +98,15 @@ build timeouts.pbi : index timeouts.xcl
 build udp.pbi : index udp.xcl
 build ethernet.pbi : index ethernet.xcl
 build sys_arch.pbi : index sys_arch.xcl
-build Project_part0.pbi : link app_ethernet.pbi ethernetif.pbi httpserver-netconn.pbi json-maker.pbi main.pbi stm32f7xx_hal_timebase_tim.pbi stm32f7xx_it.pbi tiny-json.pbi stm32f7xx_nucleo_144.pbi
-build Project_part1.pbi : link system_stm32f7xx.pbi stm32f7xx_hal.pbi stm32f7xx_hal_cortex.pbi stm32f7xx_hal_dma.pbi stm32f7xx_hal_dma2d.pbi stm32f7xx_hal_dsi.pbi stm32f7xx_hal_eth.pbi stm32f7xx_hal_flash.pbi stm32f7xx_hal_flash_ex.pbi
-build Project_part2.pbi : link stm32f7xx_hal_gpio.pbi stm32f7xx_hal_i2c.pbi stm32f7xx_hal_i2c_ex.pbi stm32f7xx_hal_ltdc.pbi stm32f7xx_hal_ltdc_ex.pbi stm32f7xx_hal_pwr.pbi stm32f7xx_hal_pwr_ex.pbi stm32f7xx_hal_rcc.pbi stm32f7xx_hal_rcc_ex.pbi
-build Project_part3.pbi : link stm32f7xx_hal_sdram.pbi stm32f7xx_hal_tim.pbi stm32f7xx_hal_tim_ex.pbi stm32f7xx_hal_uart.pbi stm32f7xx_ll_fmc.pbi cmsis_os.pbi heap_4.pbi port.pbi croutine.pbi
-build Project_part4.pbi : link list.pbi queue.pbi tasks.pbi timers.pbi api_lib.pbi api_msg.pbi err.pbi netbuf.pbi netdb.pbi
-build Project_part5.pbi : link netifapi.pbi sockets.pbi tcpip.pbi fs.pbi httpd.pbi autoip.pbi dhcp.pbi etharp.pbi icmp.pbi
-build Project_part6.pbi : link igmp.pbi ip4.pbi ip4_addr.pbi ip4_frag.pbi def.pbi dns.pbi inet_chksum.pbi init.pbi ip.pbi
-build Project_part7.pbi : link mem.pbi memp.pbi netif.pbi pbuf.pbi raw.pbi stats.pbi sys.pbi tcp.pbi tcp_in.pbi
-build Project_part8.pbi : link tcp_out.pbi timeouts.pbi udp.pbi ethernet.pbi sys_arch.pbi
+build Project_part0.pbi : link app_ethernet.pbi ethernetif.pbi httpserver-netconn.pbi json-maker.pbi main.pbi net_sockets.pbi stm32f7xx_hal_timebase_tim.pbi stm32f7xx_it.pbi tiny-json.pbi
+build Project_part1.pbi : link stm32f7xx_nucleo_144.pbi system_stm32f7xx.pbi stm32f7xx_hal.pbi stm32f7xx_hal_cortex.pbi stm32f7xx_hal_dma.pbi stm32f7xx_hal_dma2d.pbi stm32f7xx_hal_dsi.pbi stm32f7xx_hal_eth.pbi stm32f7xx_hal_flash.pbi
+build Project_part2.pbi : link stm32f7xx_hal_flash_ex.pbi stm32f7xx_hal_gpio.pbi stm32f7xx_hal_i2c.pbi stm32f7xx_hal_i2c_ex.pbi stm32f7xx_hal_ltdc.pbi stm32f7xx_hal_ltdc_ex.pbi stm32f7xx_hal_pwr.pbi stm32f7xx_hal_pwr_ex.pbi stm32f7xx_hal_rcc.pbi
+build Project_part3.pbi : link stm32f7xx_hal_rcc_ex.pbi stm32f7xx_hal_sdram.pbi stm32f7xx_hal_tim.pbi stm32f7xx_hal_tim_ex.pbi stm32f7xx_hal_uart.pbi stm32f7xx_ll_fmc.pbi cmsis_os.pbi heap_4.pbi port.pbi
+build Project_part4.pbi : link croutine.pbi list.pbi queue.pbi tasks.pbi timers.pbi api_lib.pbi api_msg.pbi err.pbi netbuf.pbi
+build Project_part5.pbi : link netdb.pbi netifapi.pbi sockets.pbi tcpip.pbi fs.pbi httpd.pbi autoip.pbi dhcp.pbi etharp.pbi
+build Project_part6.pbi : link icmp.pbi igmp.pbi ip4.pbi ip4_addr.pbi ip4_frag.pbi def.pbi dns.pbi inet_chksum.pbi init.pbi
+build Project_part7.pbi : link ip.pbi mem.pbi memp.pbi netif.pbi pbuf.pbi raw.pbi stats.pbi sys.pbi tcp.pbi
+build Project_part8.pbi : link tcp_in.pbi tcp_out.pbi timeouts.pbi udp.pbi ethernet.pbi sys_arch.pbi
 build Project.pbd : link Project_part0.pbi Project_part1.pbi Project_part2.pbi Project_part3.pbi Project_part4.pbi Project_part5.pbi Project_part6.pbi Project_part7.pbi Project_part8.pbi
 build Project.pbw : browsedata Project.pbd
 

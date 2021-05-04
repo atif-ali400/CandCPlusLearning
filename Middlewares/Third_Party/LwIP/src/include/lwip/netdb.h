@@ -33,7 +33,7 @@
  */
 #ifndef LWIP_HDR_NETDB_H
 #define LWIP_HDR_NETDB_H
-
+//#define LWIP_DNS_API_DECLARE_STRUCTS
 #include "lwip/opt.h"
 
 #if LWIP_DNS && LWIP_SOCKET
