@@ -98,16 +98,90 @@ build timeouts.pbi : index timeouts.xcl
 build udp.pbi : index udp.xcl
 build ethernet.pbi : index ethernet.xcl
 build sys_arch.pbi : index sys_arch.xcl
-build Project_part0.pbi : link app_ethernet.pbi ethernetif.pbi httpserver-netconn.pbi json-maker.pbi main.pbi net_sockets.pbi stm32f7xx_hal_timebase_tim.pbi stm32f7xx_it.pbi tiny-json.pbi
-build Project_part1.pbi : link stm32f7xx_nucleo_144.pbi system_stm32f7xx.pbi stm32f7xx_hal.pbi stm32f7xx_hal_cortex.pbi stm32f7xx_hal_dma.pbi stm32f7xx_hal_dma2d.pbi stm32f7xx_hal_dsi.pbi stm32f7xx_hal_eth.pbi stm32f7xx_hal_flash.pbi
-build Project_part2.pbi : link stm32f7xx_hal_flash_ex.pbi stm32f7xx_hal_gpio.pbi stm32f7xx_hal_i2c.pbi stm32f7xx_hal_i2c_ex.pbi stm32f7xx_hal_ltdc.pbi stm32f7xx_hal_ltdc_ex.pbi stm32f7xx_hal_pwr.pbi stm32f7xx_hal_pwr_ex.pbi stm32f7xx_hal_rcc.pbi
-build Project_part3.pbi : link stm32f7xx_hal_rcc_ex.pbi stm32f7xx_hal_sdram.pbi stm32f7xx_hal_tim.pbi stm32f7xx_hal_tim_ex.pbi stm32f7xx_hal_uart.pbi stm32f7xx_ll_fmc.pbi cmsis_os.pbi heap_4.pbi port.pbi
-build Project_part4.pbi : link croutine.pbi list.pbi queue.pbi tasks.pbi timers.pbi api_lib.pbi api_msg.pbi err.pbi netbuf.pbi
-build Project_part5.pbi : link netdb.pbi netifapi.pbi sockets.pbi tcpip.pbi fs.pbi httpd.pbi autoip.pbi dhcp.pbi etharp.pbi
-build Project_part6.pbi : link icmp.pbi igmp.pbi ip4.pbi ip4_addr.pbi ip4_frag.pbi def.pbi dns.pbi inet_chksum.pbi init.pbi
-build Project_part7.pbi : link ip.pbi mem.pbi memp.pbi netif.pbi pbuf.pbi raw.pbi stats.pbi sys.pbi tcp.pbi
-build Project_part8.pbi : link tcp_in.pbi tcp_out.pbi timeouts.pbi udp.pbi ethernet.pbi sys_arch.pbi
-build Project.pbd : link Project_part0.pbi Project_part1.pbi Project_part2.pbi Project_part3.pbi Project_part4.pbi Project_part5.pbi Project_part6.pbi Project_part7.pbi Project_part8.pbi
+build aes.pbi : index aes.xcl
+build aesni.pbi : index aesni.xcl
+build arc4.pbi : index arc4.xcl
+build asn1parse.pbi : index asn1parse.xcl
+build asn1write.pbi : index asn1write.xcl
+build base64.pbi : index base64.xcl
+build bignum.pbi : index bignum.xcl
+build blowfish.pbi : index blowfish.xcl
+build camellia.pbi : index camellia.xcl
+build ccm.pbi : index ccm.xcl
+build certs.pbi : index certs.xcl
+build cipher.pbi : index cipher.xcl
+build cipher_wrap.pbi : index cipher_wrap.xcl
+build cmac.pbi : index cmac.xcl
+build ctr_drbg.pbi : index ctr_drbg.xcl
+build debug.pbi : index debug.xcl
+build des.pbi : index des.xcl
+build dhm.pbi : index dhm.xcl
+build ecdh.pbi : index ecdh.xcl
+build ecdsa.pbi : index ecdsa.xcl
+build ecjpake.pbi : index ecjpake.xcl
+build ecp.pbi : index ecp.xcl
+build ecp_curves.pbi : index ecp_curves.xcl
+build entropy.pbi : index entropy.xcl
+build entropy_poll.pbi : index entropy_poll.xcl
+build error.pbi : index error.xcl
+build gcm.pbi : index gcm.xcl
+build havege.pbi : index havege.xcl
+build hmac_drbg.pbi : index hmac_drbg.xcl
+build md.pbi : index md.xcl
+build md2.pbi : index md2.xcl
+build md4.pbi : index md4.xcl
+build md5.pbi : index md5.xcl
+build md_wrap.pbi : index md_wrap.xcl
+build memory_buffer_alloc.pbi : index memory_buffer_alloc.xcl
+build oid.pbi : index oid.xcl
+build padlock.pbi : index padlock.xcl
+build pem.pbi : index pem.xcl
+build pk.pbi : index pk.xcl
+build pk_wrap.pbi : index pk_wrap.xcl
+build pkcs11.pbi : index pkcs11.xcl
+build pkcs12.pbi : index pkcs12.xcl
+build pkcs5.pbi : index pkcs5.xcl
+build pkparse.pbi : index pkparse.xcl
+build pkwrite.pbi : index pkwrite.xcl
+build platform.pbi : index platform.xcl
+build ripemd160.pbi : index ripemd160.xcl
+build rsa.pbi : index rsa.xcl
+build sha1.pbi : index sha1.xcl
+build sha256.pbi : index sha256.xcl
+build sha512.pbi : index sha512.xcl
+build ssl_cache.pbi : index ssl_cache.xcl
+build ssl_ciphersuites.pbi : index ssl_ciphersuites.xcl
+build ssl_cli.pbi : index ssl_cli.xcl
+build ssl_cookie.pbi : index ssl_cookie.xcl
+build ssl_srv.pbi : index ssl_srv.xcl
+build ssl_ticket.pbi : index ssl_ticket.xcl
+build ssl_tls.pbi : index ssl_tls.xcl
+build threading.pbi : index threading.xcl
+build timing.pbi : index timing.xcl
+build version.pbi : index version.xcl
+build version_features.pbi : index version_features.xcl
+build x509.pbi : index x509.xcl
+build x509_create.pbi : index x509_create.xcl
+build x509_crl.pbi : index x509_crl.xcl
+build x509_crt.pbi : index x509_crt.xcl
+build x509_csr.pbi : index x509_csr.xcl
+build x509write_crt.pbi : index x509write_crt.xcl
+build x509write_csr.pbi : index x509write_csr.xcl
+build xtea.pbi : index xtea.xcl
+build Project_part0.pbi : link app_ethernet.pbi ethernetif.pbi httpserver-netconn.pbi json-maker.pbi main.pbi net_sockets.pbi stm32f7xx_hal_timebase_tim.pbi stm32f7xx_it.pbi tiny-json.pbi stm32f7xx_nucleo_144.pbi system_stm32f7xx.pbi stm32f7xx_hal.pbi
+build Project_part1.pbi : link stm32f7xx_hal_cortex.pbi stm32f7xx_hal_dma.pbi stm32f7xx_hal_dma2d.pbi stm32f7xx_hal_dsi.pbi stm32f7xx_hal_eth.pbi stm32f7xx_hal_flash.pbi stm32f7xx_hal_flash_ex.pbi stm32f7xx_hal_gpio.pbi stm32f7xx_hal_i2c.pbi stm32f7xx_hal_i2c_ex.pbi stm32f7xx_hal_ltdc.pbi stm32f7xx_hal_ltdc_ex.pbi
+build Project_part2.pbi : link stm32f7xx_hal_pwr.pbi stm32f7xx_hal_pwr_ex.pbi stm32f7xx_hal_rcc.pbi stm32f7xx_hal_rcc_ex.pbi stm32f7xx_hal_sdram.pbi stm32f7xx_hal_tim.pbi stm32f7xx_hal_tim_ex.pbi stm32f7xx_hal_uart.pbi stm32f7xx_ll_fmc.pbi cmsis_os.pbi heap_4.pbi port.pbi
+build Project_part3.pbi : link croutine.pbi list.pbi queue.pbi tasks.pbi timers.pbi api_lib.pbi api_msg.pbi err.pbi netbuf.pbi netdb.pbi netifapi.pbi sockets.pbi
+build Project_part4.pbi : link tcpip.pbi fs.pbi httpd.pbi autoip.pbi dhcp.pbi etharp.pbi icmp.pbi igmp.pbi ip4.pbi ip4_addr.pbi ip4_frag.pbi def.pbi
+build Project_part5.pbi : link dns.pbi inet_chksum.pbi init.pbi ip.pbi mem.pbi memp.pbi netif.pbi pbuf.pbi raw.pbi stats.pbi sys.pbi tcp.pbi
+build Project_part6.pbi : link tcp_in.pbi tcp_out.pbi timeouts.pbi udp.pbi ethernet.pbi sys_arch.pbi aes.pbi aesni.pbi arc4.pbi asn1parse.pbi asn1write.pbi base64.pbi
+build Project_part7.pbi : link bignum.pbi blowfish.pbi camellia.pbi ccm.pbi certs.pbi cipher.pbi cipher_wrap.pbi cmac.pbi ctr_drbg.pbi debug.pbi des.pbi dhm.pbi
+build Project_part8.pbi : link ecdh.pbi ecdsa.pbi ecjpake.pbi ecp.pbi ecp_curves.pbi entropy.pbi entropy_poll.pbi error.pbi gcm.pbi havege.pbi hmac_drbg.pbi md.pbi
+build Project_part9.pbi : link md2.pbi md4.pbi md5.pbi md_wrap.pbi memory_buffer_alloc.pbi oid.pbi padlock.pbi pem.pbi pk.pbi pk_wrap.pbi pkcs11.pbi pkcs12.pbi
+build Project_part10.pbi : link pkcs5.pbi pkparse.pbi pkwrite.pbi platform.pbi ripemd160.pbi rsa.pbi sha1.pbi sha256.pbi sha512.pbi ssl_cache.pbi ssl_ciphersuites.pbi ssl_cli.pbi
+build Project_part11.pbi : link ssl_cookie.pbi ssl_srv.pbi ssl_ticket.pbi ssl_tls.pbi threading.pbi timing.pbi version.pbi version_features.pbi x509.pbi x509_create.pbi x509_crl.pbi x509_crt.pbi
+build Project_part12.pbi : link x509_csr.pbi x509write_crt.pbi x509write_csr.pbi xtea.pbi
+build Project.pbd : link Project_part0.pbi Project_part1.pbi Project_part2.pbi Project_part3.pbi Project_part4.pbi Project_part5.pbi Project_part6.pbi Project_part7.pbi Project_part8.pbi Project_part9.pbi Project_part10.pbi Project_part11.pbi Project_part12.pbi
 build Project.pbw : browsedata Project.pbd
 
 

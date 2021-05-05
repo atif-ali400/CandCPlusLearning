@@ -343,7 +343,7 @@
  * LWIP_USE_EXTERNAL_MBEDTLS: Use external mbed TLS library
  */
 #ifndef LWIP_USE_EXTERNAL_MBEDTLS
-#define LWIP_USE_EXTERNAL_MBEDTLS       0
+#define LWIP_USE_EXTERNAL_MBEDTLS       1 // Updated from 0 to 1 in order to use mbed TLS
 #endif
 
 /*

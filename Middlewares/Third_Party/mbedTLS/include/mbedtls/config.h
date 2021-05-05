@@ -105,7 +105,7 @@
  *
  * Comment if your system does not support time functions
  */
-#define MBEDTLS_HAVE_TIME
+//#define MBEDTLS_HAVE_TIME
 
 /**
  * \def MBEDTLS_HAVE_TIME_DATE
@@ -117,7 +117,7 @@
  *
  * Comment if your system does not have a correct clock.
  */
-#define MBEDTLS_HAVE_TIME_DATE
+//#define MBEDTLS_HAVE_TIME_DATE
 
 /**
  * \def MBEDTLS_PLATFORM_MEMORY
@@ -879,7 +879,7 @@
  *
  * Enable functions that use the filesystem.
  */
-#define MBEDTLS_FS_IO
+//#define MBEDTLS_FS_IO 
 
 /**
  * \def MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES
@@ -903,7 +903,11 @@
  *
  * Uncomment this macro to disable the built-in platform entropy functions.
  */
-//#define MBEDTLS_NO_PLATFORM_ENTROPY
+/*
+In order to compile Mbed TLS for a bare-metal environment which already has a standard C library, 
+configure your build by enabling MBEDTLS_NO_PLATFORM_ENTROPY
+*/
+#define MBEDTLS_NO_PLATFORM_ENTROPY
 
 /**
  * \def MBEDTLS_ENTROPY_FORCE_SHA256
@@ -2063,7 +2067,12 @@
  *
  * This module provides networking routines.
  */
-#define MBEDTLS_NET_C
+/*
+in order to compile Mbed TLS for a bare-metal environment which already has a standard C library, 
+configure your build by disabling MBEDTLS_NET_C.
+
+*/
+#define MBEDTLS_NET_C    
 
 /**
  * \def MBEDTLS_OID_C
@@ -2444,7 +2453,11 @@
  *
  * This module is used by the HAVEGE random number generator.
  */
-#define MBEDTLS_TIMING_C
+/*
+In order to compile Mbed TLS for a bare-metal environment which already has a standard C library, 
+configure your build by disabling MBEDTLS_TIMING_C
+*/
+//#define MBEDTLS_TIMING_C
 
 /**
  * \def MBEDTLS_VERSION_C

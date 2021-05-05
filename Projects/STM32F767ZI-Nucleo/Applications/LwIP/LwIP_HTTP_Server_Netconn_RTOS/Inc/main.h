@@ -49,10 +49,6 @@
 
 #define SERVER_PORT "4433"
 
-#define HTTP_RESPONSE \
-    "HTTP/1.0 200 OK\r\nContent-Type: text/html\r\n\r\n" \
-    "<h2>mbed TLS Test Server</h2>\r\n" \
-    "<p>Successful connection using: %s</p>\r\n"
       
 #ifdef __cplusplus
  extern "C" {
