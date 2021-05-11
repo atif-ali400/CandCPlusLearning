@@ -72,21 +72,11 @@ void mbedtls_net_init( mbedtls_net_context *ctx )
   tcpip_init(NULL, NULL);
 
   /* IP default settings, to be overridden by DHCP */  
-/*
+
   IP4_ADDR(&addr, IP_ADDR0, IP_ADDR1, IP_ADDR2, IP_ADDR3);
   IP4_ADDR(&gw, GW_ADDR0, GW_ADDR1, GW_ADDR2, GW_ADDR3);
   IP4_ADDR(&netmask, MASK_ADDR0, MASK_ADDR1, MASK_ADDR2, MASK_ADDR3);
-  */
-   /* IP default settings, to be overridden by DHCP */
-#if (LWIP_DHCP == 1)
-  ip_addr_set_zero_ip4(&addr);
-  ip_addr_set_zero_ip4(&netmask);
-  ip_addr_set_zero_ip4(&gw);
-#else
-  ip4addr_aton(IP_ADDR, &addr);
-  ip4addr_aton(GW_ADDR, &gw);
-  ip4addr_aton(MASK_ADDR, &netmask);
-#endif
+  
  /* add the network interface */    
   netif_add(&netif, &addr, &netmask, &gw, NULL, &ethernetif_init, &ethernet_input);
 

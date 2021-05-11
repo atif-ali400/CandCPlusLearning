@@ -60,26 +60,47 @@
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/ 
-#define USE_DHCP       /* enable DHCP, if disabled static address is used*/
- 
-/*Static IP ADDRESS*/
-#define IP_ADDR0   192
-#define IP_ADDR1   168
-#define IP_ADDR2   0
-#define IP_ADDR3   10
-   
-/*NETMASK*/
-#define NETMASK_ADDR0   255
-#define NETMASK_ADDR1   255
-#define NETMASK_ADDR2   255
-#define NETMASK_ADDR3   0
 
-/*Gateway Address*/
-#define GW_ADDR0   192
-#define GW_ADDR1   168
-#define GW_ADDR2   0
-#define GW_ADDR3   1 
-   
+#define HTTP_RESPONSE \
+    "HTTP/1.0 200 OK\r\nContent-Type: text/html\r\n\r\n" \
+    "<h2>mbed TLS Test Server</h2>\r\n" \
+    "<p>Successful connection using: %s</p>\r\n"
+//#define USE_DHCP       /* enable DHCP, if disabled static address is used*/
+ #ifdef USE_DHCP
+
+#define IP_ADDR0  0
+#define IP_ADDR1  0
+#define IP_ADDR2  0
+#define IP_ADDR3  0
+
+#define GW_ADDR0  0
+#define GW_ADDR1  0
+#define GW_ADDR2  0
+#define GW_ADDR3  0
+
+#define MASK_ADDR0  0
+#define MASK_ADDR1  0
+#define MASK_ADDR2  0
+#define MASK_ADDR3  0
+
+#else
+
+#define IP_ADDR0  192
+#define IP_ADDR1  168
+#define IP_ADDR2  1
+#define IP_ADDR3  1
+
+#define GW_ADDR0  192
+#define GW_ADDR1  168
+#define GW_ADDR2  1
+#define GW_ADDR3  1
+
+#define MASK_ADDR0  255
+#define MASK_ADDR1  255
+#define MASK_ADDR2  254
+#define MASK_ADDR3  0
+
+#endif /* USE_DHCP */
 #ifdef MBEDTLS_MEMORY_BUFFER_ALLOC_C
 #define MAX_MEM_SIZE 80 * 1024
 #endif
@@ -87,6 +108,8 @@
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */  
 void Error_Handler(void);
+void SSL_Server(void const *argument);
+
 
 #ifdef __cplusplus
 }

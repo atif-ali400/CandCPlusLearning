@@ -1215,6 +1215,9 @@
                 <name>$PROJ_DIR$\..\Src\net_sockets.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\Src\ssl_server.c</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\Src\stm32f7xx_hal_timebase_tim.c</name>
             </file>
             <file>
@@ -1497,6 +1500,9 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\arc4.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\aria.c</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\asn1parse.c</name>
             </file>
             <file>
@@ -1519,6 +1525,12 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\certs.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\chacha20.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\chachapoly.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\cipher.c</name>
@@ -1572,6 +1584,9 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\havege.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\hkdf.c</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\hmac_drbg.c</name>
             </file>
             <file>
@@ -1593,7 +1608,7 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\memory_buffer_alloc.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\net_sockets_template.c</name>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\nist_kw.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\oid.c</name>
@@ -1629,10 +1644,22 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\platform.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\platform_util.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\poly1305.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\psa_crypto.c</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\ripemd160.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\rsa.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\rsa_internal.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\sha1.c</name>
