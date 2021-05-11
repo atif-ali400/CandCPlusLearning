@@ -50,9 +50,9 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "ethernetif.h"
-#include "lwip/netif.h"
-#include "lwip/tcpip.h"
-#include "app_ethernet.h"
+//#include "lwip/netif.h"
+//#include "lwip/tcpip.h"
+//#include "app_ethernet.h"
 //#include "httpserver-netconn.h"
 #include <string.h>
 

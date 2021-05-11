@@ -13,14 +13,14 @@
     </Stack>
     <StLinkDriver>
         <stlinkserialNo>0672FF504955857567244756</stlinkserialNo>
-        <stlinkfoundProbes>0668FF343339415043186033:0672FF504955857567244756:</stlinkfoundProbes>
+        <stlinkfoundProbes />
         <CStepIntDis>_ 0</CStepIntDis>
         <LeaveTargetRunning>_ 0</LeaveTargetRunning>
         <stlinkResetStyle>0</stlinkResetStyle>
         <stlinkResetStrategy>2</stlinkResetStrategy>
     </StLinkDriver>
     <DebugChecksum>
-        <Checksum>2024055299</Checksum>
+        <Checksum>1283102146</Checksum>
     </DebugChecksum>
     <Exceptions>
         <StopOnUncaught>_ 0</StopOnUncaught>
@@ -56,6 +56,9 @@
         <ITMportsLogFile>0</ITMportsLogFile>
         <ITMlogFile>$PROJ_DIR$\ITM.log</ITMlogFile>
     </SWOTraceHWSettings>
+    <InterruptStripe>
+        <Sort>1</Sort>
+    </InterruptStripe>
     <Trace2>
         <Enabled>0</Enabled>
         <ShowSource>0</ShowSource>
