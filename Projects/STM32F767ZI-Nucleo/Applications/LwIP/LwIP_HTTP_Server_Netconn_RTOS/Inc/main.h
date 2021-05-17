@@ -66,7 +66,7 @@
     "<h2>mbed TLS Test Server</h2>\r\n" \
     "<p>Successful connection using: %s</p>\r\n"
 //#define USE_DHCP       /* enable DHCP, if disabled static address is used*/
- #ifdef USE_DHCP
+#ifdef USE_DHCP
 
 #define IP_ADDR0  0
 #define IP_ADDR1  0
@@ -82,6 +82,13 @@
 #define MASK_ADDR1  0
 #define MASK_ADDR2  0
 #define MASK_ADDR3  0
+
+/*NETMASK*/
+#define NETMASK_ADDR0   255
+#define NETMASK_ADDR1   255
+#define NETMASK_ADDR2   255
+#define NETMASK_ADDR3   0
+
 
 #else
 

@@ -203,7 +203,22 @@ The STM32F7xx allows computing and verifying the IP, UDP, TCP and ICMP checksums
 /**
  * LWIP_SOCKET==1: Enable Socket API (require to use sockets.c)
  */
+//#define LWIP_SOCKET                     1 //updated to 1 from default 0 to enable socket for TLS
+/*
+   ------------------------------------
+   ---------- Socket options ----------
+   ------------------------------------
+*/
+
+/**
+ * LWIP_SOCKET==1: Enable Socket API (require to use sockets.c) . Added all this part for TLS
+ */
 #define LWIP_SOCKET                     1 //updated to 1 from default 0 to enable socket for TLS
+#define LWIP_DNS                        1
+#define SO_REUSE                        1
+#define RECV_BUFSIZE_DEFAULT            1500
+#define LWIP_SO_RCVBUF                  1
+
 /*
    ------------------------------------
    ---------- SSI and CGI options ----------
