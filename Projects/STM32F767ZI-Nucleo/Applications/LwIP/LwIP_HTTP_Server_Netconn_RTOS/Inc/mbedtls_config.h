@@ -2651,7 +2651,7 @@
 #define MBEDTLS_PLATFORM_PRINTF_MACRO LCD_UsrTrace
 #endif
 
-//#define MBEDTLS_ENTROPY_HARDWARE_ALT
+#define MBEDTLS_ENTROPY_HARDWARE_ALT
 
 #include "mbedtls/check_config.h"
 

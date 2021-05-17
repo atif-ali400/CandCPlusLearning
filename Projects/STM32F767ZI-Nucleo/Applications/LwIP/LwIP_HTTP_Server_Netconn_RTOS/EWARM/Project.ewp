@@ -1091,6 +1091,9 @@
                 <name>$PROJ_DIR$\..\Src\ethernetif.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\Src\hardware_rng.c</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\Src\httpserver-netconn.c</name>
             </file>
             <file>
@@ -1104,6 +1107,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Src\ssl_server.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\Src\stm32f7xx_hal_msp.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Src\stm32f7xx_hal_timebase_tim.c</name>
@@ -1191,6 +1197,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_rcc_ex.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_rng.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_sdram.c</name>

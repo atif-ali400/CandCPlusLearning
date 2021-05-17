@@ -55,8 +55,6 @@
 //#include "app_ethernet.h"
 //#include "httpserver-netconn.h"
 #include <string.h>
-
-
 /* FreeRTOS buffer for static allocation */
 
 #if (configAPPLICATION_ALLOCATED_HEAP == 1)
@@ -76,7 +74,7 @@ static void SystemClock_Config(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
 //#define USE_DHCP
-//RNG_HandleTypeDef RngHandle; // For external entropy source also set //MBEDTLS_ENTROPY_HARDWARE_ALT
+RNG_HandleTypeDef RngHandle; // For external entropy source also set //MBEDTLS_ENTROPY_HARDWARE_ALT
 
       
 #define DEBUG_LEVEL 5  // Updated to enable in order to use mbed TLS debug . Comment it otherwise
@@ -90,7 +88,7 @@ static void CPU_CACHE_Enable(void);
 //        fflush(  (FILE *) ctx  );
 //      }
 /* Private functions ---------------------------------------------------------*/
-//static void RNG_Init(void);
+static void RNG_Init(void);
 static void MainThread(void const * argument);
 
 #ifdef __GNUC__
@@ -130,6 +128,7 @@ int main(void)
   BSP_LED_Init(LED1); //LED1: ethernet cable is connected.
   BSP_LED_Init(LED2);
   BSP_LED_Init(LED3); //LED3: ethernet cable is not connected.
+  RNG_Init();
  //  __iar_builtin_enable_interrupt();
   
   /* Start of mbedTLS test code */
@@ -338,6 +337,19 @@ void Error_Handler(void)
     
   }
 }
+/**
+* @brief  This function is executed in case of success occurrence.
+* @param  None
+* @retval None
+*/
+void Success_Handler(void)
+{
+  while (1)
+  {
+    BSP_LED_Toggle(LED_GREEN);
+    osDelay(200);
+  }
+}
 
 /**
 * @brief  Configure the MPU attributes .
@@ -410,6 +422,24 @@ static void CPU_CACHE_Enable(void)
   
   /* Enable D-Cache */
   SCB_EnableDCache();
+}
+/* RNG init function */
+static void RNG_Init(void)
+{
+  RngHandle.Instance = RNG;
+ /* DeInitialize the RNG peripheral */
+  if (HAL_RNG_DeInit(&RngHandle) != HAL_OK)
+  {
+    /* DeInitialization Error */
+    Error_Handler();
+  }
+
+  /* Initialize the RNG peripheral */
+  if (HAL_RNG_Init(&RngHandle) != HAL_OK)
+  {
+    /* Initialization Error */
+    Error_Handler();
+  }
 }
 
 #ifdef  USE_FULL_ASSERT
