@@ -77,7 +77,7 @@ static void CPU_CACHE_Enable(void);
 RNG_HandleTypeDef RngHandle; // For external entropy source also set //MBEDTLS_ENTROPY_HARDWARE_ALT
 
       
-#define DEBUG_LEVEL 5  // Updated to enable in order to use mbed TLS debug . Comment it otherwise
+#define DEBUG_LEVEL 1  // Updated to enable in order to use mbed TLS debug . Comment it otherwise
 //      static void my_debug( void *ctx, int level,
 //                           const char *file, int line,
 //                           const char *str )

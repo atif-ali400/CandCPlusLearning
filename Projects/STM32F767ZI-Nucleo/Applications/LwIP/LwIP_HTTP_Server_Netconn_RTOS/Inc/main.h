@@ -63,7 +63,7 @@
 
 #define HTTP_RESPONSE \
     "HTTP/1.0 200 OK\r\nContent-Type: text/html\r\n\r\n" \
-    "<h2>mbed TLS Test Server</h2>\r\n" \
+    "<h2>mbed TLS Test Server For Ampetronic BLE Project</h2>\r\n" \
     "<p>Successful connection using: %s</p>\r\n"
 #define USE_DHCP       /* enable DHCP, if disabled static address is used*/
 #ifdef USE_DHCP
