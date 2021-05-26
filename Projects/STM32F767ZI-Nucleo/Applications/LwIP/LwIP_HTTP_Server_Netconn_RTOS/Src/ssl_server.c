@@ -76,6 +76,9 @@ mbedtls_pk_context pkey;
 #if defined(MBEDTLS_SSL_CACHE_C)
   mbedtls_ssl_cache_context cache;
 #endif
+ /* C_Array File system to support on mbedTLS---------------------------------------*/
+struct fs_file file;
+#include "lwip/apps/fs.h"
 
 void SSL_Server(void const *argument)
 {
@@ -295,6 +298,9 @@ reset:
 
     if(ret > 0)
     {
+      
+      
+      //breaks after read successful (positive ret value)
       break;
     }
   } while(1);
@@ -304,6 +310,22 @@ reset:
    */
   mbedtls_printf( "  > Write to client:" );
   len = sprintf((char *) buf, HTTP_RESPONSE, mbedtls_ssl_get_ciphersuite(&ssl));
+  
+  
+//  if ((len >=5) && (strncmp((char *)buf, "GET /", 5) == 0))
+//      {
+//         if((strncmp((char *)buf, "GET /STM32F7xx.html", 19) == 0)||(strncmp((char *)buf, "GET / ", 6) == 0)) 
+//        {
+//          /* Load STM32F7xx page */
+//          fs_open(&file, "/STM32F7xx.html"); 
+//          
+//          mbedtls_ssl_write(&ssl, (const unsigned char*)(file.data), (size_t)file.len);
+//          
+//          //netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+//          fs_close(&file);
+//        }
+//        
+//      }
 
   while((ret = mbedtls_ssl_write(&ssl, buf, len)) <= 0)
   {
@@ -318,6 +340,12 @@ reset:
       mbedtls_printf( " failed\n  ! mbedtls_ssl_write returned %d\n\n", ret );
       goto exit;
     }
+  }
+  if ( ret>0)
+  {
+    fs_open(&file, "/STM32F7xx.html"); 
+    mbedtls_ssl_write(&ssl, (const unsigned char*)(file.data), (size_t)file.len);
+    fs_close(&file);
   }
 
   len = ret;
