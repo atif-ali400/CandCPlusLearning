@@ -36,7 +36,6 @@
 #ifndef PPP_SUPPORT
 #define PPP_SUPPORT                     0
 #endif
-
 /**
  * PPPOE_SUPPORT==1: Enable PPP Over Ethernet
  */
@@ -48,7 +47,7 @@
  * PPPOL2TP_SUPPORT==1: Enable PPP Over L2TP
  */
 #ifndef PPPOL2TP_SUPPORT
-#define PPPOL2TP_SUPPORT                0
+#define PPPOL2TP_SUPPORT                0  //Updated to 1 for auth support
 #endif
 
 /**

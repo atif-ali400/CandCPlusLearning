@@ -159,10 +159,6 @@ static void Netif_Config(void)
   ip_addr_t ipaddr ;
   ip_addr_t netmask ;
   ip_addr_t gw ;
-  //  
-  //  ip_addr_t ipaddr = 192.168.0.11;
-  //  ip_addr_t netmask = 255.255.255.0;
-  //  ip_addr_t gw = 192.168.0.1;
   
 #ifdef USE_DHCP
   ip_addr_set_zero_ip4(&ipaddr);

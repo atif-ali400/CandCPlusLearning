@@ -1096,6 +1096,9 @@
                 <name>$PROJ_DIR$\..\Src\main.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\Src\server_auth.c</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\Src\stm32f7xx_hal_timebase_tim.c</name>
             </file>
             <file>
