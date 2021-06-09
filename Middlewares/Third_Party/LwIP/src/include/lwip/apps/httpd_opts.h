@@ -113,7 +113,7 @@
  * the (readonly) fsdata will grow a bit as every file includes the HTTP
  * header. */
 #if !defined LWIP_HTTPD_DYNAMIC_HEADERS || defined __DOXYGEN__
-#define LWIP_HTTPD_DYNAMIC_HEADERS 0
+#define LWIP_HTTPD_DYNAMIC_HEADERS 1 //updated to enable dynamic headers for authentication
 #endif
 
 #if !defined HTTPD_DEBUG || defined __DOXYGEN__

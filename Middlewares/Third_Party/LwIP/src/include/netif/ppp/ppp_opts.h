@@ -47,7 +47,7 @@
  * PPPOL2TP_SUPPORT==1: Enable PPP Over L2TP
  */
 #ifndef PPPOL2TP_SUPPORT
-#define PPPOL2TP_SUPPORT                0  //Updated to 1 for auth support
+#define PPPOL2TP_SUPPORT                1  //Updated to 1 for auth support
 #endif
 
 /**

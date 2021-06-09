@@ -29,6 +29,7 @@ static const char * const g_psHTTPHeaderStrings[] =
  "Connection: keep-alive\r\n",
  "Connection: keep-alive\r\nContent-Length: ",
  "Server: "HTTPD_SERVER_AGENT"\r\n",
+ "HTTP/1.1 401 Unauthorized\r\n",
  "\r\n<html><body><h2>404: The requested file cannot be found.</h2></body></html>\r\n"
 #if LWIP_HTTPD_SUPPORT_11_KEEPALIVE
  ,"Connection: keep-alive\r\nContent-Length: 77\r\n\r\n<html><body><h2>404: The requested file cannot be found.</h2></body></html>\r\n"
@@ -49,10 +50,12 @@ static const char * const g_psHTTPHeaderStrings[] =
 #define HTTP_HDR_CONN_KEEPALIVE 10 /* Connection: keep-alive (HTTP 1.1) */
 #define HTTP_HDR_KEEPALIVE_LEN  11 /* Connection: keep-alive + Content-Length: (HTTP 1.1)*/
 #define HTTP_HDR_SERVER         12 /* Server: HTTPD_SERVER_AGENT */
-#define DEFAULT_404_HTML        13 /* default 404 body */
+#define HTTP_UNAUTHORIZED      13  /* 401 Unauthorized support added for auth*/
+#define DEFAULT_404_HTML        14 /* default 404 body */
 #if LWIP_HTTPD_SUPPORT_11_KEEPALIVE
-#define DEFAULT_404_HTML_PERSISTENT 14 /* default 404 body, but including Connection: keep-alive */
+#define DEFAULT_404_HTML_PERSISTENT 15 /* default 404 body, but including Connection: keep-alive */
 #endif
+
 
 
 #define HTTP_HDR_HTML           "Content-type: text/html\r\n\r\n"

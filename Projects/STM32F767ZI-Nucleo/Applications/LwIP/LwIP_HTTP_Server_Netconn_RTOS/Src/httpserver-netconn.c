@@ -269,7 +269,8 @@ int data_to_json( char* dest, struct data const* data ) {
     p = json_end( p );
     return p - dest;
 }
-
+char const* auth_header = "WWW-Authenticate: Basic realm=\"Protected Area\"\r\n";
+uint8_t LoggedIn = 0;
 //Server test code end
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -353,10 +354,18 @@ static void http_server_serve(struct netconn *conn)
         }
         else if((strncmp(buf, "GET /STM32F7xx.html", 19) == 0)||(strncmp(buf, "GET / ", 6) == 0)) 
         {
+          if(!LoggedIn){
+          fs_open(&file, "/401.html");
+          netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+          netconn_write(conn, (const unsigned char*)auth_header, (size_t)strlen(auth_header), NETCONN_NOCOPY);
+          fs_close(&file);
+          }
           /* Load STM32F7xx page */
+          else{
           fs_open(&file, "/STM32F7xx.html"); 
           netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
           fs_close(&file);
+          }
         }
         //Start of the test string for embedded webserver
         else if((strncmp(buf, "GET /style.css", 14) == 0)||(strncmp(buf, "GET / ", 6) == 0)) 
@@ -512,7 +521,13 @@ static void http_server_serve(struct netconn *conn)
          // netconn_write(conn, (const unsigned char*)SuccessfulPOSTResponse, (size_t)strlen(SuccessfulPOSTResponse), NETCONN_NOCOPY);
          // netconn_write(conn, (const unsigned char*)buffer, (size_t)strlen(buffer), NETCONN_NOCOPY);
           netconn_write(conn, (const unsigned char*)buff, (size_t)strlen(buff), NETCONN_NOCOPY);*/
-         
+          else 
+        {
+          /* Load Error page */
+          fs_open(&file, "/404.html"); 
+          netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+          fs_close(&file);
+        }
       } 
         //         if((strncmp(buf, "POST /STM32F7xx.html", 20) == 0)||(strncmp(buf, "POST / ", 7) == 0)) 
         //        {
