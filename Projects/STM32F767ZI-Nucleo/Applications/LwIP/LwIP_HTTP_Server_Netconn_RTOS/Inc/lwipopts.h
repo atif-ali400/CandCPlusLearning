@@ -220,7 +220,7 @@ The STM32F7xx allows computing and verifying the IP, UDP, TCP and ICMP checksums
 /**
  * LWIP_HTTPD_DYNAMIC_HEADERS == 1: Enable LWIP_HTTPD_DYNAMIC_HEADERS support (SSI)
  */
-//#define LWIP_HTTPD_DYNAMIC_HEADERS
+//#define LWIP_HTTPD_DYNAMIC_HEADERS 
 
 /*
    ------------------------------------

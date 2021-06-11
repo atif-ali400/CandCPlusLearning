@@ -1313,7 +1313,7 @@
 #define LWIP_EVENT_API                  0
 #endif
 #ifndef LWIP_CALLBACK_API
-#define LWIP_CALLBACK_API               0
+#define LWIP_CALLBACK_API               1 //Updated to 1 for adding auth
 #endif
 #endif
 

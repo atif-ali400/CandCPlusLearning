@@ -353,11 +353,15 @@ static void http_server_serve(struct netconn *conn)
           fs_close(&file);
         }
         else if((strncmp(buf, "GET /STM32F7xx.html", 19) == 0)||(strncmp(buf, "GET / ", 6) == 0)) 
-        {
+        { 
+          //char* un_auth_code = g_psHTTPHeaderStrings[HTTP_UNAUTHORIZED];
+          const char* un_auth_code = "HTTP/1.1 401 Unauthorized\r\n";
           if(!LoggedIn){
           fs_open(&file, "/401.html");
-          netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+          netconn_write(conn, (const unsigned char*)un_auth_code, (size_t)strlen(un_auth_code), NETCONN_NOCOPY);
           netconn_write(conn, (const unsigned char*)auth_header, (size_t)strlen(auth_header), NETCONN_NOCOPY);
+          netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+         
           fs_close(&file);
           }
           /* Load STM32F7xx page */
@@ -379,6 +383,7 @@ static void http_server_serve(struct netconn *conn)
         {
           /* Load functions js page */
           fs_open(&file, "/functions.js"); 
+          
           netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
           fs_close(&file);
         }
