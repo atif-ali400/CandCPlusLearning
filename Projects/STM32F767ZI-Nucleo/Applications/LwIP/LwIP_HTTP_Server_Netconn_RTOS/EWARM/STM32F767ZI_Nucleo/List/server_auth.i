@@ -15576,7 +15576,6 @@ void DynWebPage(struct netconn *conn);
 
 
 
-
 /**
  * @brief HTTP status code
  **/
@@ -15628,6 +15627,8 @@ uint8_t check_user( char* user, char* password);
 uint8_t check_host( struct netconn *conn);
 
 
+uint8_t parse_header(char* payload_buf);
+
 
 
 
@@ -15652,4 +15653,14 @@ uint8_t check_host( struct netconn *conn)
   return valid_host;
   
   
+}
+uint8_t parse_header(char* payload_buf)
+{
+uint8_t success = 0;
+
+  if((strstr(payload_buf, "led2On=true"))!=0)
+  {
+  }
+
+return success;
 }

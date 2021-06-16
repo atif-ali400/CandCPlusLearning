@@ -20,3 +20,13 @@ uint8_t check_host( struct netconn *conn)
   
   
 }
+uint8_t parse_header(char* payload_buf)
+{
+uint8_t success = 0;
+
+  if((strstr(payload_buf, "led2On=true"))!=NULL)
+  {
+  }
+
+return success;
+}

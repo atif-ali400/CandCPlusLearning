@@ -48,17 +48,20 @@
 #include "lwip/arch.h"
 #include "lwip/api.h"
 #include "lwip/apps/fs.h"
-#include "string.h"
+//#include "string.h"
 #include "httpserver-netconn.h"
 #include "cmsis_os.h"
 //#include "jsmn.h"
 //#include "ArduinoJson.h"
-#include <stdbool.h>
+//#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
 #include "json-maker.h"
 #include "tiny-json.h"
 #include "stm32f7xx_nucleo_144.h"
+//#include "httpd_structs.h"
 
 
 /* Private typedef -----------------------------------------------------------*/
@@ -270,7 +273,74 @@ int data_to_json( char* dest, struct data const* data ) {
     return p - dest;
 }
 char const* auth_header = "WWW-Authenticate: Basic realm=\"Protected Area\"\r\n";
+const char* un_auth_code = "HTTP/1.1 401 Unauthorized\r\n";
+const char* success_code = "HTTP/1.0 200 OK\r\n";
+static unsigned char* decoded_user_pass = NULL;
 uint8_t LoggedIn = 0;
+static char encoding_table[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+                                'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+                                'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+                                'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
+                                'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+                                'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+                                'w', 'x', 'y', 'z', '0', '1', '2', '3',
+                                '4', '5', '6', '7', '8', '9', '+', '/'};
+static char *decoding_table = NULL;
+void build_decoding_table() {
+
+    decoding_table = malloc(256);
+if(decoding_table)
+{
+    for (int i = 0; i < 64; i++)
+    {
+        decoding_table[(unsigned char) encoding_table[i]] = i;
+    }
+}
+
+}
+
+
+void base64_cleanup() {
+    free(decoding_table);
+}
+
+unsigned char *base64_decode(const char *data,
+                             size_t input_length,
+                             size_t *output_length) {
+
+    if (decoding_table == NULL) build_decoding_table();
+
+    if (input_length % 4 != 0) return NULL;
+
+    *output_length = input_length / 4 * 3;
+    if (data[input_length - 1] == '=') (*output_length)--;
+    if (data[input_length - 2] == '=') (*output_length)--;
+
+    unsigned char *decoded_data = malloc(*output_length);
+    if (decoded_data == NULL) return NULL;
+
+    for (int i = 0, j = 0; i < input_length;) {
+
+        uint32_t sextet_a = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
+        uint32_t sextet_b = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
+        uint32_t sextet_c = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
+        uint32_t sextet_d = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
+
+        uint32_t triple = (sextet_a << 3 * 6)
+        + (sextet_b << 2 * 6)
+        + (sextet_c << 1 * 6)
+        + (sextet_d << 0 * 6);
+
+        if (j < *output_length) decoded_data[j++] = (triple >> 2 * 8) & 0xFF;
+        if (j < *output_length) decoded_data[j++] = (triple >> 1 * 8) & 0xFF;
+        if (j < *output_length) decoded_data[j++] = (triple >> 0 * 8) & 0xFF;
+    }
+
+    return decoded_data;
+}
+
+
+
 //Server test code end
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -286,6 +356,7 @@ static void http_server_serve(struct netconn *conn)
   err_t recv_err;
   char* buf;
   static u16_t buflen;
+  static uint8_t login_attempt = 0;
   struct fs_file file;
   struct led_status ledStatus_s;
   char json_output[512];
@@ -355,14 +426,60 @@ static void http_server_serve(struct netconn *conn)
         else if((strncmp(buf, "GET /STM32F7xx.html", 19) == 0)||(strncmp(buf, "GET / ", 6) == 0)) 
         { 
           //char* un_auth_code = g_psHTTPHeaderStrings[HTTP_UNAUTHORIZED];
-          const char* un_auth_code = "HTTP/1.1 401 Unauthorized\r\n";
-          if(!LoggedIn){
+          
+          if((!LoggedIn)&&(login_attempt == 0)){
           fs_open(&file, "/401.html");
           netconn_write(conn, (const unsigned char*)un_auth_code, (size_t)strlen(un_auth_code), NETCONN_NOCOPY);
           netconn_write(conn, (const unsigned char*)auth_header, (size_t)strlen(auth_header), NETCONN_NOCOPY);
           netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
-         
+          login_attempt++;
           fs_close(&file);
+          }
+          else if((!LoggedIn)&&(login_attempt == 1)){
+          
+          //fs_open(&file, "/401.html");
+         // netconn_write(conn, (const unsigned char*)un_auth_code, (size_t)strlen(un_auth_code), NETCONN_NOCOPY);
+         // netconn_write(conn, (const unsigned char*)auth_header, (size_t)strlen(auth_header), NETCONN_NOCOPY);
+         // netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+         // fs_close(&file);
+   char* auth_str = strstr(buf, "Authorization: Basic");    
+   char *rest;
+   char *token;
+   char *user_pass;
+   //char* decoded_user_pass;
+   size_t size;
+   //Retrieve the authentication scheme and password
+   token = strtok_r(auth_str, " \t", &rest);
+   token = strtok_r(NULL, " \t", &rest);
+   user_pass = strtok_r(NULL, " \n", &rest);
+  // b64_decode(user_pass, decoded_user_pass, size);
+ //  decoded_user_pass  = base64_decode(user_pass,strlen(user_pass), &size);
+    //Properly terminate the string
+      //      decoded_user_pass[size] = '\0';
+#if 0
+    //To do: check if decoding is Successful 
+            //Properly terminate the string
+            user_pass[size] = '\0';
+            //Check whether a separator is present
+           char* separator = strchr(user_pass, ':');
+
+            //Separator found?
+            if(separator != NULL)
+            {
+               //Split the line
+               *separator = '\0';
+
+               //Point to the password
+               user_pass = separator + 1;
+               //Save password
+               
+               
+            }   
+#endif       
+           // netconn_write(conn, (const unsigned char*)success_code, (size_t)strlen(success_code), NETCONN_NOCOPY);
+            netconn_write(conn, (const unsigned char*)user_pass, (size_t)strlen(user_pass), NETCONN_NOCOPY);
+            
+           // base64_cleanup();
           }
           /* Load STM32F7xx page */
           else{

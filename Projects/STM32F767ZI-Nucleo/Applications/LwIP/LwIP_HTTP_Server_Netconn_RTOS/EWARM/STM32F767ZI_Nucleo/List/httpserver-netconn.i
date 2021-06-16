@@ -15939,157 +15939,7 @@ int fs_bytes_left(struct fs_file *file);
 
 
 
-/* string.h standard header */
-/* Copyright 2009-2017 IAR Systems AB. */
-
-  #pragma system_include
-
-/* ycheck.h internal checking header file. */
-/* Copyright 2005-2017 IAR Systems AB. */
-
-/* Note that there is no include guard for this header. This is intentional. */
-
-  #pragma system_include
-
-/* __AEABI_PORTABILITY_INTERNAL_LEVEL
- *
- * Note: Redefined each time ycheck.h is included, i.e. for each
- * system header, to ensure that ABI support could be turned off/on
- * individually for each file.
- *
- * Possible values for this preprocessor symbol:
- *
- * 0 - ABI portability mode is disabled.
- *
- * 1 - ABI portability mode (version 1) is enabled.
- *
- * All other values are reserved for future use.
- */
-
-
-
-/**************************************************
- *
- * ARM-specific configuration for string.h in DLib.
- *
- * Copyright 2006-2017 IAR Systems AB.
- *
- * $Id: DLib_Product_string.h 126465 2018-03-21 15:15:50Z mats $
- *
- **************************************************/
-
-
-  #pragma system_include
-
-
-  /*
-   * The following is pre-declared by the compiler.
-   *
-   * __INTRINSIC void __aeabi_memset (void *, size_t, int);
-   * __INTRINSIC void __aeabi_memcpy (void *, const void *, size_t);
-   * __INTRINSIC void __aeabi_memmove(void *, const void *, size_t);
-   */
-
-
-  /*
-   * Inhibit inline definitions for routines with an effective
-   * ARM-specific implementation.
-   *
-   * Not in Cortex-M1 and Cortex-MS1
-   */
-
-
-
-
-  /*
-   * Redirect calls to standard functions to the corresponding
-   * __aeabi_X function.
-   */
-
-
-  #pragma inline=forced_no_body
-  _Pragma("function_effects = no_state, no_read(1), no_write(2), returns 1, always_returns") __intrinsic __nounwind void * memcpy(void * _D, const void * _S, size_t _N)
-  {
-    __aeabi_memcpy(_D, _S, _N);
-    return _D;
-  }
-
-  #pragma inline=forced_no_body
-  _Pragma("function_effects = no_state, no_read(1), no_write(2), returns 1, always_returns") __intrinsic __nounwind void * memmove(void * _D, const void * _S, size_t _N)
-  {
-    __aeabi_memmove(_D, _S, _N);
-    return _D;
-  }
-
-  #pragma inline=forced_no_body
-  _Pragma("function_effects = no_state, no_read(1), returns 1, always_returns") __intrinsic __nounwind void * memset(void * _D, int _C, size_t _N)
-  {
-    __aeabi_memset(_D, _N, _C);
-    return _D;
-  }
-
-
-
-
-/* macros */
-
-/* type definitions */
-
-/* declarations */
-
-  _Pragma("function_effects = no_state, no_write(1,2), always_returns")   __intrinsic __nounwind   int       memcmp(const void *, const void *,
-                                                   size_t);
-  _Pragma("function_effects = no_state, no_read(1), no_write(2), returns 1, always_returns")  __intrinsic __nounwind void *    memcpy(void *restrict,
-                                                   const void *restrict,
-                                                   size_t);
-  _Pragma("function_effects = no_state, no_read(1), no_write(2), returns 1, always_returns")  __intrinsic __nounwind void *    memmove(void *, const void *,
-                                                    size_t);
-  _Pragma("function_effects = no_state, no_read(1), returns 1, always_returns")     __intrinsic __nounwind void *    memset(void *, int, size_t);
-  _Pragma("function_effects = no_state, no_write(2), returns 1, always_returns")     __intrinsic __nounwind char *    strcat(char *restrict,
-                                                   const char *restrict);
-  _Pragma("function_effects = no_state, no_write(1,2), always_returns")   __intrinsic __nounwind   int       strcmp(const char *, const char *);
-  _Pragma("function_effects = no_write(1,2), always_returns")     __intrinsic __nounwind   int       strcoll(const char *, const char *);
-  _Pragma("function_effects = no_state, no_read(1), no_write(2), returns 1, always_returns")  __intrinsic __nounwind char *    strcpy(char *restrict,
-                                                   const char *restrict);
-  _Pragma("function_effects = no_state, no_write(1,2), always_returns")   __intrinsic __nounwind   size_t    strcspn(const char *, const char *);
-                    __intrinsic __nounwind char *    strerror(int);
-  _Pragma("function_effects = no_state, no_write(1), always_returns")      __intrinsic __nounwind   size_t    strlen(const char *);
-  _Pragma("function_effects = no_state, no_write(2), returns 1, always_returns")     __intrinsic __nounwind char *    strncat(char *restrict,
-                                                    const char *restrict,
-                                                    size_t);
-  _Pragma("function_effects = no_state, no_write(1,2), always_returns")   __intrinsic __nounwind   int       strncmp(const char *, const char *,
-                                                    size_t);
-  _Pragma("function_effects = no_state, no_read(1), no_write(2), returns 1, always_returns")  __intrinsic __nounwind char *    strncpy(char *restrict,
-                                                    const char *restrict,
-                                                    size_t);
-  _Pragma("function_effects = no_state, no_write(1,2), always_returns")   __intrinsic __nounwind   size_t    strspn(const char *, const char *);
-  _Pragma("function_effects = no_write(2), always_returns")         __intrinsic __nounwind char *    strtok(char *restrict,
-                                                   const char *restrict);
-  _Pragma("function_effects = no_write(2), always_returns")        __intrinsic __nounwind   size_t    strxfrm(char *restrict,
-                                                    const char *restrict,
-                                                    size_t);
-    _Pragma("function_effects = no_write(1), always_returns")      __intrinsic __nounwind   char *    strdup(const char *);
-    _Pragma("function_effects = no_write(1,2), always_returns")   __intrinsic __nounwind   int       strcasecmp(const char *,
-                                                       const char *);
-    _Pragma("function_effects = no_write(1,2), always_returns")   __intrinsic __nounwind   int       strncasecmp(const char *,
-                                                        const char *, size_t);
-    _Pragma("function_effects = no_state, no_write(2), always_returns")    __intrinsic __nounwind   char *    strtok_r(char *, const char *,
-                                                     char **);
-    _Pragma("function_effects = no_state, no_write(1), always_returns")     __intrinsic __nounwind size_t    strnlen(char const *, size_t);
-
-
-  _Pragma("function_effects = no_state, no_write(1), always_returns")    __intrinsic __nounwind void *memchr(const void *_S, int _C, size_t _N);
-  _Pragma("function_effects = no_state, no_write(1), always_returns")    __intrinsic __nounwind char *strchr(const char *_S, int _C);
-  _Pragma("function_effects = no_state, no_write(1,2), always_returns") __intrinsic __nounwind char *strpbrk(const char *_S, const char *_P);
-  _Pragma("function_effects = no_state, no_write(1), always_returns")    __intrinsic __nounwind char *strrchr(const char *_S, int _C);
-  _Pragma("function_effects = no_state, no_write(1,2), always_returns") __intrinsic __nounwind char *strstr(const char *_S, const char *_P);
-
-
-
-/*
- * Copyright (c) by P.J. Plauger. All rights reserved.
- * Consult your license regarding permissions and restrictions.
-V6.50:0576 */
+//#include "string.h"
 
 
 void http_server_netconn_init(void);
@@ -16275,13 +16125,151 @@ used throughout the whole project.
 
 //#include "jsmn.h"
 //#include "ArduinoJson.h"
-/* stdbool.h header */
-/* Copyright 2003-2017 IAR Systems AB.  */
+//#include <stdbool.h>
+/* string.h standard header */
+/* Copyright 2009-2017 IAR Systems AB. */
+
+  #pragma system_include
+
+/* ycheck.h internal checking header file. */
+/* Copyright 2005-2017 IAR Systems AB. */
+
+/* Note that there is no include guard for this header. This is intentional. */
+
+  #pragma system_include
+
+/* __AEABI_PORTABILITY_INTERNAL_LEVEL
+ *
+ * Note: Redefined each time ycheck.h is included, i.e. for each
+ * system header, to ensure that ABI support could be turned off/on
+ * individually for each file.
+ *
+ * Possible values for this preprocessor symbol:
+ *
+ * 0 - ABI portability mode is disabled.
+ *
+ * 1 - ABI portability mode (version 1) is enabled.
+ *
+ * All other values are reserved for future use.
+ */
+
+
+
+/**************************************************
+ *
+ * ARM-specific configuration for string.h in DLib.
+ *
+ * Copyright 2006-2017 IAR Systems AB.
+ *
+ * $Id: DLib_Product_string.h 126465 2018-03-21 15:15:50Z mats $
+ *
+ **************************************************/
 
 
   #pragma system_include
 
 
+  /*
+   * The following is pre-declared by the compiler.
+   *
+   * __INTRINSIC void __aeabi_memset (void *, size_t, int);
+   * __INTRINSIC void __aeabi_memcpy (void *, const void *, size_t);
+   * __INTRINSIC void __aeabi_memmove(void *, const void *, size_t);
+   */
+
+
+  /*
+   * Inhibit inline definitions for routines with an effective
+   * ARM-specific implementation.
+   *
+   * Not in Cortex-M1 and Cortex-MS1
+   */
+
+
+
+
+  /*
+   * Redirect calls to standard functions to the corresponding
+   * __aeabi_X function.
+   */
+
+
+  #pragma inline=forced_no_body
+  _Pragma("function_effects = no_state, no_read(1), no_write(2), returns 1, always_returns") __intrinsic __nounwind void * memcpy(void * _D, const void * _S, size_t _N)
+  {
+    __aeabi_memcpy(_D, _S, _N);
+    return _D;
+  }
+
+  #pragma inline=forced_no_body
+  _Pragma("function_effects = no_state, no_read(1), no_write(2), returns 1, always_returns") __intrinsic __nounwind void * memmove(void * _D, const void * _S, size_t _N)
+  {
+    __aeabi_memmove(_D, _S, _N);
+    return _D;
+  }
+
+  #pragma inline=forced_no_body
+  _Pragma("function_effects = no_state, no_read(1), returns 1, always_returns") __intrinsic __nounwind void * memset(void * _D, int _C, size_t _N)
+  {
+    __aeabi_memset(_D, _N, _C);
+    return _D;
+  }
+
+
+
+
+/* macros */
+
+/* type definitions */
+
+/* declarations */
+
+  _Pragma("function_effects = no_state, no_write(1,2), always_returns")   __intrinsic __nounwind   int       memcmp(const void *, const void *,
+                                                   size_t);
+  _Pragma("function_effects = no_state, no_read(1), no_write(2), returns 1, always_returns")  __intrinsic __nounwind void *    memcpy(void *restrict,
+                                                   const void *restrict,
+                                                   size_t);
+  _Pragma("function_effects = no_state, no_read(1), no_write(2), returns 1, always_returns")  __intrinsic __nounwind void *    memmove(void *, const void *,
+                                                    size_t);
+  _Pragma("function_effects = no_state, no_read(1), returns 1, always_returns")     __intrinsic __nounwind void *    memset(void *, int, size_t);
+  _Pragma("function_effects = no_state, no_write(2), returns 1, always_returns")     __intrinsic __nounwind char *    strcat(char *restrict,
+                                                   const char *restrict);
+  _Pragma("function_effects = no_state, no_write(1,2), always_returns")   __intrinsic __nounwind   int       strcmp(const char *, const char *);
+  _Pragma("function_effects = no_write(1,2), always_returns")     __intrinsic __nounwind   int       strcoll(const char *, const char *);
+  _Pragma("function_effects = no_state, no_read(1), no_write(2), returns 1, always_returns")  __intrinsic __nounwind char *    strcpy(char *restrict,
+                                                   const char *restrict);
+  _Pragma("function_effects = no_state, no_write(1,2), always_returns")   __intrinsic __nounwind   size_t    strcspn(const char *, const char *);
+                    __intrinsic __nounwind char *    strerror(int);
+  _Pragma("function_effects = no_state, no_write(1), always_returns")      __intrinsic __nounwind   size_t    strlen(const char *);
+  _Pragma("function_effects = no_state, no_write(2), returns 1, always_returns")     __intrinsic __nounwind char *    strncat(char *restrict,
+                                                    const char *restrict,
+                                                    size_t);
+  _Pragma("function_effects = no_state, no_write(1,2), always_returns")   __intrinsic __nounwind   int       strncmp(const char *, const char *,
+                                                    size_t);
+  _Pragma("function_effects = no_state, no_read(1), no_write(2), returns 1, always_returns")  __intrinsic __nounwind char *    strncpy(char *restrict,
+                                                    const char *restrict,
+                                                    size_t);
+  _Pragma("function_effects = no_state, no_write(1,2), always_returns")   __intrinsic __nounwind   size_t    strspn(const char *, const char *);
+  _Pragma("function_effects = no_write(2), always_returns")         __intrinsic __nounwind char *    strtok(char *restrict,
+                                                   const char *restrict);
+  _Pragma("function_effects = no_write(2), always_returns")        __intrinsic __nounwind   size_t    strxfrm(char *restrict,
+                                                    const char *restrict,
+                                                    size_t);
+    _Pragma("function_effects = no_write(1), always_returns")      __intrinsic __nounwind   char *    strdup(const char *);
+    _Pragma("function_effects = no_write(1,2), always_returns")   __intrinsic __nounwind   int       strcasecmp(const char *,
+                                                       const char *);
+    _Pragma("function_effects = no_write(1,2), always_returns")   __intrinsic __nounwind   int       strncasecmp(const char *,
+                                                        const char *, size_t);
+    _Pragma("function_effects = no_state, no_write(2), always_returns")    __intrinsic __nounwind   char *    strtok_r(char *, const char *,
+                                                     char **);
+    _Pragma("function_effects = no_state, no_write(1), always_returns")     __intrinsic __nounwind size_t    strnlen(char const *, size_t);
+
+
+  _Pragma("function_effects = no_state, no_write(1), always_returns")    __intrinsic __nounwind void *memchr(const void *_S, int _C, size_t _N);
+  _Pragma("function_effects = no_state, no_write(1), always_returns")    __intrinsic __nounwind char *strchr(const char *_S, int _C);
+  _Pragma("function_effects = no_state, no_write(1,2), always_returns") __intrinsic __nounwind char *strpbrk(const char *_S, const char *_P);
+  _Pragma("function_effects = no_state, no_write(1), always_returns")    __intrinsic __nounwind char *strrchr(const char *_S, int _C);
+  _Pragma("function_effects = no_state, no_write(1,2), always_returns") __intrinsic __nounwind char *strstr(const char *_S, const char *_P);
 
 
 
@@ -16454,6 +16442,20 @@ char* json_double( char* dest, char const* name, double value );
 
 
 
+/* stdbool.h header */
+/* Copyright 2003-2017 IAR Systems AB.  */
+
+
+  #pragma system_include
+
+
+
+
+
+/*
+ * Copyright (c) by P.J. Plauger. All rights reserved.
+ * Consult your license regarding permissions and restrictions.
+V6.50:0576 */
 
 
 /** @defgroup tinyJson Tiny JSON parser.
@@ -36329,6 +36331,7 @@ uint32_t         BSP_PB_GetState(Button_TypeDef Button);
 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+//#include "httpd_structs.h"
 
 
 /* Private typedef -----------------------------------------------------------*/
@@ -36539,7 +36542,74 @@ int data_to_json( char* dest, struct data const* data ) {
     return p - dest;
 }
 char const* auth_header = "WWW-Authenticate: Basic realm=\"Protected Area\"\r\n";
+const char* un_auth_code = "HTTP/1.1 401 Unauthorized\r\n";
+const char* success_code = "HTTP/1.0 200 OK\r\n";
+static unsigned char* decoded_user_pass = 0;
 uint8_t LoggedIn = 0;
+static char encoding_table[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+                                'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+                                'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+                                'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
+                                'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+                                'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+                                'w', 'x', 'y', 'z', '0', '1', '2', '3',
+                                '4', '5', '6', '7', '8', '9', '+', '/'};
+static char *decoding_table = 0;
+void build_decoding_table() {
+
+    decoding_table = malloc(256);
+if(decoding_table)
+{
+    for (int i = 0; i < 64; i++)
+    {
+        decoding_table[(unsigned char) encoding_table[i]] = i;
+    }
+}
+
+}
+
+
+void base64_cleanup() {
+    free(decoding_table);
+}
+
+unsigned char *base64_decode(const char *data,
+                             size_t input_length,
+                             size_t *output_length) {
+
+    if (decoding_table == 0) build_decoding_table();
+
+    if (input_length % 4 != 0) return 0;
+
+    *output_length = input_length / 4 * 3;
+    if (data[input_length - 1] == '=') (*output_length)--;
+    if (data[input_length - 2] == '=') (*output_length)--;
+
+    unsigned char *decoded_data = malloc(*output_length);
+    if (decoded_data == 0) return 0;
+
+    for (int i = 0, j = 0; i < input_length;) {
+
+        uint32_t sextet_a = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
+        uint32_t sextet_b = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
+        uint32_t sextet_c = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
+        uint32_t sextet_d = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
+
+        uint32_t triple = (sextet_a << 3 * 6)
+        + (sextet_b << 2 * 6)
+        + (sextet_c << 1 * 6)
+        + (sextet_d << 0 * 6);
+
+        if (j < *output_length) decoded_data[j++] = (triple >> 2 * 8) & 0xFF;
+        if (j < *output_length) decoded_data[j++] = (triple >> 1 * 8) & 0xFF;
+        if (j < *output_length) decoded_data[j++] = (triple >> 0 * 8) & 0xFF;
+    }
+
+    return decoded_data;
+}
+
+
+
 //Server test code end
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -36555,6 +36625,7 @@ static void http_server_serve(struct netconn *conn)
   err_t recv_err;
   char* buf;
   static u16_t buflen;
+  static uint8_t login_attempt = 0;
   struct fs_file file;
   struct led_status ledStatus_s;
   char json_output[512];
@@ -36624,14 +36695,40 @@ static void http_server_serve(struct netconn *conn)
         else if((strncmp(buf, "GET /STM32F7xx.html", 19) == 0)||(strncmp(buf, "GET / ", 6) == 0)) 
         { 
           //char* un_auth_code = g_psHTTPHeaderStrings[HTTP_UNAUTHORIZED];
-          const char* un_auth_code = "HTTP/1.1 401 Unauthorized\r\n";
-          if(!LoggedIn){
+          
+          if((!LoggedIn)&&(login_attempt == 0)){
           fs_open(&file, "/401.html");
           netconn_write_partly(conn, (const unsigned char*)un_auth_code, (size_t)strlen(un_auth_code), 0x00, 0);
           netconn_write_partly(conn, (const unsigned char*)auth_header, (size_t)strlen(auth_header), 0x00, 0);
           netconn_write_partly(conn, (const unsigned char*)(file . data), (size_t)file . len, 0x00, 0);
-         
+          login_attempt++;
           fs_close(&file);
+          }
+          else if((!LoggedIn)&&(login_attempt == 1)){
+          
+          //fs_open(&file, "/401.html");
+         // netconn_write(conn, (const unsigned char*)un_auth_code, (size_t)strlen(un_auth_code), NETCONN_NOCOPY);
+         // netconn_write(conn, (const unsigned char*)auth_header, (size_t)strlen(auth_header), NETCONN_NOCOPY);
+         // netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+         // fs_close(&file);
+   char* auth_str = strstr(buf, "Authorization: Basic");    
+   char *rest;
+   char *token;
+   char *user_pass;
+   //char* decoded_user_pass;
+   size_t size;
+   //Retrieve the authentication scheme and password
+   token = strtok_r(auth_str, " \t", &rest);
+   token = strtok_r(0, " \t", &rest);
+   user_pass = strtok_r(0, " \n", &rest);
+  // b64_decode(user_pass, decoded_user_pass, size);
+ //  decoded_user_pass  = base64_decode(user_pass,strlen(user_pass), &size);
+    //Properly terminate the string
+      //      decoded_user_pass[size] = '\0';
+           // netconn_write(conn, (const unsigned char*)success_code, (size_t)strlen(success_code), NETCONN_NOCOPY);
+            netconn_write_partly(conn, (const unsigned char*)user_pass, (size_t)strlen(user_pass), 0x00, 0);
+            
+           // base64_cleanup();
           }
           /* Load STM32F7xx page */
           else{

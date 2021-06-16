@@ -3,7 +3,7 @@
 
 #include "httpserver-netconn.h"
 #include <stdint.h>
-
+#include <stdio.h>
 #define HTTP_EN_USER_AUTH    1
 
 
@@ -57,6 +57,8 @@ uint8_t check_user( char* user, char* password);
 
 uint8_t check_host( struct netconn *conn);
 
+
+uint8_t parse_header(char* payload_buf);
 
 
 
