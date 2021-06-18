@@ -46,8 +46,9 @@
 #define MBEDTLS_EXIT_FAILURE    EXIT_FAILURE
 #endif
 
-#include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
+#include "server_auth.h"
 /* External Includes to support mbedTLS---------------------------------------*/
 #include "mbedtls/entropy.h"
 #include "mbedtls/ctr_drbg.h"
@@ -64,7 +65,10 @@
 
 
 static mbedtls_net_context listen_fd, client_fd;
-static uint8_t buf[1024];
+//static uint8_t buf[1024];
+static char buf[1024];
+static char In_buf[1024];
+//static uint8_t request_buf[1024];
 static const char *pers = "ssl_server";
 mbedtls_entropy_context entropy;
 mbedtls_ctr_drbg_context ctr_drbg;
@@ -72,6 +76,14 @@ mbedtls_ssl_context ssl;
 mbedtls_ssl_config conf;
 mbedtls_x509_crt srvcert;
 mbedtls_pk_context pkey;
+/* Test header and status codes   ---------------------------------------*/
+
+char const* auth_header = "WWW-Authenticate: Basic realm=\"Protected Area\"\r\n";
+const char* un_auth_code = "HTTP/1.1 401 Unauthorized\r\n";
+const char* success_code = "HTTP/1.0 200 OK\r\n";
+static unsigned char* decoded_user_pass = NULL;
+char* header_buff[50] ;
+uint8_t LoggedIn = 0;
 
 #if defined(MBEDTLS_SSL_CACHE_C)
   mbedtls_ssl_cache_context cache;
@@ -116,7 +128,8 @@ void SSL_Server(void const *argument)
   mbedtls_printf( "\n  . Loading the server cert. and key..." );
 
   /*
-   * This program uses embedded test certificates.
+   * This program uses embedded test certificates with mbedtls_x509_crt_parse().
+   * web files are ROM based without file system.
    * Using mbedtls_x509_crt_parse_file() to read the server and CA certificates
    * Note: resuires the implmentation of the File I/O API using the FatFs, that is 
    * not implemented yet.
@@ -147,7 +160,7 @@ void SSL_Server(void const *argument)
   mbedtls_printf( " ok\n" );
 
   /*
-   * 2. Setup the listening TCP socket
+   * 2. Setup the listening TCP socket (port 4433 used for secure socket)
    */
   mbedtls_printf( "  . Bind on https://localhost:%s/ ...", SERVER_PORT );
 
@@ -160,7 +173,7 @@ void SSL_Server(void const *argument)
   mbedtls_printf( " ok\n" );
 
   /*
-   * 3. Seed the RNG
+   * 3. Seed the RNG ( hardware based RNG used from stm32)
    */
   mbedtls_printf( "  . Seeding the random number generator..." );
 
@@ -173,7 +186,7 @@ void SSL_Server(void const *argument)
   mbedtls_printf( " ok\n" );
 
   /*
-   * 4. Setup stuff
+   * 4. Setup stuff for SSL data, ca chains etc.
    */
   mbedtls_printf( "  . Setting up the SSL data...." );
 
@@ -255,11 +268,11 @@ reset:
   mbedtls_printf("  < Read from client:");
   do
   {
-    len = sizeof(buf) - 1;
-    memset(buf, 0, sizeof(buf));
+    len = sizeof(In_buf) - 1;
+    memset(In_buf, 0, sizeof(In_buf));
     BSP_LED_Off(LED_GREEN);
     BSP_LED_Off(LED_RED);
-    ret = mbedtls_ssl_read(&ssl, buf, len);
+    ret = mbedtls_ssl_read(&ssl, In_buf, len);
 
     if(ret == MBEDTLS_ERR_SSL_WANT_READ || ret == MBEDTLS_ERR_SSL_WANT_WRITE)
     {
@@ -294,38 +307,20 @@ reset:
     }
 
     len = ret;
-    mbedtls_printf(" %d bytes read\n\n%s", len, (char *) buf);
-
+   // mbedtls_printf(" %d bytes read\n\n%s", len, (char *) buf);
     if(ret > 0)
     {
-      
-      
+     
       //breaks after read successful (positive ret value)
       break;
     }
   } while(1);
 
   /*
-   * 8. Write the 200 Response
+   * 8. Write the HTTP response 200 in case of success
    */
   mbedtls_printf( "  > Write to client:" );
   len = sprintf((char *) buf, HTTP_RESPONSE, mbedtls_ssl_get_ciphersuite(&ssl));
-  
-  
-//  if ((len >=5) && (strncmp((char *)buf, "GET /", 5) == 0))
-//      {
-//         if((strncmp((char *)buf, "GET /STM32F7xx.html", 19) == 0)||(strncmp((char *)buf, "GET / ", 6) == 0)) 
-//        {
-//          /* Load STM32F7xx page */
-//          fs_open(&file, "/STM32F7xx.html"); 
-//          
-//          mbedtls_ssl_write(&ssl, (const unsigned char*)(file.data), (size_t)file.len);
-//          
-//          //netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
-//          fs_close(&file);
-//        }
-//        
-//      }
 
   while((ret = mbedtls_ssl_write(&ssl, buf, len)) <= 0)
   {
@@ -341,11 +336,142 @@ reset:
       goto exit;
     }
   }
+  
   if ( ret>0)
   {
+ // sprintf((char *) header_buff, HTTP_RESPONSE, mbedtls_ssl_get_ciphersuite(&ssl));
+      if((strncmp(In_buf, "GET /STM32F7xx.html", 19) == 0)||(strncmp(In_buf, "GET / ", 6) == 0)) 
+        { 
+    fs_open(&file, "/STM32F7xx.html"); 
+    
+    mbedtls_ssl_write(&ssl, (const unsigned char*)(file.data), (size_t)file.len);
+    fs_close(&file);
+        }
+    /* Check if request to get ST.gif */ 
+       else if (strncmp((char const *)In_buf,"GET /STM32F7xx_files/ST.gif",27)==0)
+        {
+          fs_open(&file, "/STM32F7xx_files/ST.gif"); 
+          mbedtls_ssl_write(&ssl, (const unsigned char*)(file.data), (size_t)file.len);
+          fs_close(&file);
+        }   
+        /* Check if request to get stm32.jpeg */
+        else if (strncmp((char const *)In_buf,"GET /STM32F7xx_files/stm32.jpg",30)==0)
+        {
+          fs_open(&file, "/STM32F7xx_files/stm32.jpg"); 
+          mbedtls_ssl_write(&ssl, (const unsigned char*)(file.data), (size_t)file.len);
+          fs_close(&file);
+        }
+        else if (strncmp((char const *)In_buf,"GET /STM32F7xx_files/logo.jpg", 29) == 0)                                           
+        {
+          /* Check if request to get ST logo.jpg */
+          fs_open(&file, "/STM32F7xx_files/logo.jpg"); 
+          mbedtls_ssl_write(&ssl, (const unsigned char*)(file.data), (size_t)file.len);
+          fs_close(&file);
+        }
+        else if(strncmp((char const *)In_buf, "GET /STM32F7xxTASKS.html", 24) == 0)
+        {
+          /* Load dynamic page */
+        //  DynWebPage(ssl);
+        }
+      
+#if 0   
+     if((strncmp(buf, "GET /STM32F7xx.html", 19) == 0)||(strncmp(buf, "GET / ", 6) == 0)) 
+        { 
     fs_open(&file, "/STM32F7xx.html"); 
     mbedtls_ssl_write(&ssl, (const unsigned char*)(file.data), (size_t)file.len);
     fs_close(&file);
+        }
+    /* Check if request to get ST.gif */ 
+       else if (strncmp((char const *)buf,"GET /STM32F7xx_files/ST.gif",27)==0)
+        {
+          fs_open(&file, "/STM32F7xx_files/ST.gif"); 
+          mbedtls_ssl_write(&ssl, (const unsigned char*)(file.data), (size_t)file.len);
+          fs_close(&file);
+        }   
+        /* Check if request to get stm32.jpeg */
+        else if (strncmp((char const *)buf,"GET /STM32F7xx_files/stm32.jpg",30)==0)
+        {
+          fs_open(&file, "/STM32F7xx_files/stm32.jpg"); 
+          mbedtls_ssl_write(&ssl, (const unsigned char*)(file.data), (size_t)file.len);
+          fs_close(&file);
+        }
+        else if (strncmp((char const *)buf,"GET /STM32F7xx_files/logo.jpg", 29) == 0)                                           
+        {
+          /* Check if request to get ST logo.jpg */
+          fs_open(&file, "/STM32F7xx_files/logo.jpg"); 
+          mbedtls_ssl_write(&ssl, (const unsigned char*)(file.data), (size_t)file.len);
+          fs_close(&file);
+        }
+        else if(strncmp((char const *)buf, "GET /STM32F7xxTASKS.html", 24) == 0)
+        {
+          /* Load dynamic page */
+        //  DynWebPage(ssl);
+        }
+#endif
+    /*
+////char* un_auth_code = g_psHTTPHeaderStrings[HTTP_UNAUTHORIZED];
+//          
+//          if((!LoggedIn)&&(login_attempt == 0)){
+//          fs_open(&file, "/401.html");
+//          netconn_write(conn, (const unsigned char*)un_auth_code, (size_t)strlen(un_auth_code), NETCONN_NOCOPY);
+//          netconn_write(conn, (const unsigned char*)auth_header, (size_t)strlen(auth_header), NETCONN_NOCOPY);
+//          netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+//          login_attempt++;
+//          fs_close(&file);
+//          }
+//          else if((!LoggedIn)&&(login_attempt == 1)){
+//          
+//          //fs_open(&file, "/401.html");
+//         // netconn_write(conn, (const unsigned char*)un_auth_code, (size_t)strlen(un_auth_code), NETCONN_NOCOPY);
+//         // netconn_write(conn, (const unsigned char*)auth_header, (size_t)strlen(auth_header), NETCONN_NOCOPY);
+//         // netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+//         // fs_close(&file);
+//   char* auth_str = strstr(buf, "Authorization: Basic");    
+//   char *rest;
+//   char *token;
+//   char *user_pass;
+//   //char* decoded_user_pass;
+//   size_t size;
+//   //Retrieve the authentication scheme and password
+//   token = strtok_r(auth_str, " \t", &rest);
+//   token = strtok_r(NULL, " \t", &rest);
+//   user_pass = strtok_r(NULL, " \n", &rest);
+//  // b64_decode(user_pass, decoded_user_pass, size);
+// //  decoded_user_pass  = base64_decode(user_pass,strlen(user_pass), &size);
+//    //Properly terminate the string
+//      //      decoded_user_pass[size] = '\0';
+//#if 0
+//    //To do: check if decoding is Successful 
+//            //Properly terminate the string
+//            user_pass[size] = '\0';
+//            //Check whether a separator is present
+//           char* separator = strchr(user_pass, ':');
+//
+//            //Separator found?
+//            if(separator != NULL)
+//            {
+//               //Split the line
+//               *separator = '\0';
+//
+//               //Point to the password
+//               user_pass = separator + 1;
+//               //Save password
+//               
+//               
+//            }   
+//#endif       
+//           // netconn_write(conn, (const unsigned char*)success_code, (size_t)strlen(success_code), NETCONN_NOCOPY);
+//            netconn_write(conn, (const unsigned char*)user_pass, (size_t)strlen(user_pass), NETCONN_NOCOPY);
+//            
+//           // base64_cleanup();
+//          }
+//          /* Load STM32F7xx page */
+//       //   else{
+////          fs_open(&file, "/STM32F7xx.html"); 
+////          netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+////          fs_close(&file);
+////          }
+
   }
 
   len = ret;

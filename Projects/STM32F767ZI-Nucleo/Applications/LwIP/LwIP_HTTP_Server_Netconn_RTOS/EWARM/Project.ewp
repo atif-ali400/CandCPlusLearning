@@ -368,6 +368,7 @@
                     <state>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\FreeRTOS\Source\include</state>
                     <state>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\include\</state>
                     <state>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbedTLS\library\</state>
+                    <state>C:\Users\AtifM\Desktop\EmbeddedWebServer\STM32WebServerHttps\STM32Cube_FW_F7_V1.11.0\Middlewares\Third_Party\FreeRTOS\Source\portable\IAR\ARM_CM7\r0p1</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -1104,6 +1105,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Src\net_sockets.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\Src\server_auth.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Src\ssl_server.c</name>
