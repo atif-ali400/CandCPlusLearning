@@ -61,10 +61,17 @@
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/ 
 
+//#define HTTP_RESPONSE \
+//    "HTTP/1.0 200 OK\r\nContent-Type: text/html\r\n\r\n" \
+//    "<h2>mbed TLS Test Server For Ampetronic BLE Project</h2>\r\n" \
+//    "<p>Successful connection using: %s</p>\r\n"
 #define HTTP_RESPONSE \
-    "HTTP/1.0 200 OK\r\nContent-Type: text/html\r\n\r\n" \
+    "HTTP/1.0 200 OK\r\n\r\n" \
     "<h2>mbed TLS Test Server For Ampetronic BLE Project</h2>\r\n" \
     "<p>Successful connection using: %s</p>\r\n"
+#define HTTP_AUTH_RESPONSE \
+    "HTTP/1.1 401 Unauthorized\r\n" \
+    "WWW-Authenticate: Basic realm=\"Protected Area\"\r\n\r\n"
 #define USE_DHCP       /* enable DHCP, if disabled static address is used*/
 #ifdef USE_DHCP
 
